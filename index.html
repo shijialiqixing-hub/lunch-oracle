@@ -233,6 +233,30 @@
     .dish-card .dish-secondary { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
     .dish-card .dish-arrow { color: var(--text-muted); font-size: 18px; }
 
+    /* External link pill on dish cards */
+    .dish-external-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 6px 10px; border-radius: 20px;
+      background: var(--primary-dim); color: var(--primary);
+      font-size: 11px; font-weight: 600;
+      text-decoration: none; white-space: nowrap;
+      transition: all 0.2s ease; flex-shrink: 0;
+      touch-action: manipulation;
+    }
+    .dish-external-link:active { background: var(--primary); color: #fff; transform: scale(0.95); }
+
+    /* Find Restaurant button on result screen */
+    .btn-find-restaurant {
+      width: 100%; padding: 14px;
+      border-radius: var(--radius-lg);
+      background: var(--primary-dim); border: 1px solid var(--primary);
+      color: var(--primary); font-size: 15px; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+      touch-action: manipulation;
+      transition: all 0.2s ease; margin-top: 0;
+    }
+    .btn-find-restaurant:active { background: var(--primary); color: #fff; transform: scale(0.97); }
+
     .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface-elevated); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 12px 24px; font-size: 14px; color: var(--secondary); font-weight: 600; opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; z-index: 100; pointer-events: none; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -273,6 +297,7 @@
         <div class="result-actions">
           <button id="btn-accept" class="btn-accept"></button>
           <button id="btn-redraw" class="btn-redraw"></button>
+          <button id="btn-find-restaurant" class="btn-find-restaurant"></button>
           <div class="btn-row">
             <button id="btn-share" class="btn-share"></button>
             <button id="btn-browse" class="btn-browse"></button>
@@ -328,7 +353,8 @@
       enjoyMeal:      { 'zh-HK': '🎉 食嘅開心！', 'zh-CN': '🎉 吃得开心！', en: '🎉 Enjoy your meal!', ja: '🎉 いただきます！', ko: '🎉 맛있게 드세요!', fr: '🎉 Bon appétit !' },
       copied:         { 'zh-HK': '✅ 已複製！', 'zh-CN': '✅ 已复制！', en: '✅ Copied!', ja: '✅ コピーしました！', ko: '✅ 복사됨!', fr: '✅ Copié !' },
       luckyColor:     { 'zh-HK': '幸運色：', 'zh-CN': '幸运色：', en: 'Lucky color: ', ja: 'ラッキーカラー：', ko: '행운의 색: ', fr: 'Couleur porte-bonheur : ' },
-      elementSuffix:  { 'zh-HK': '行', 'zh-CN': '行', en: '', ja: '行', ko: '행', fr: '' }
+      elementSuffix:  { 'zh-HK': '行', 'zh-CN': '行', en: '', ja: '行', ko: '행', fr: '' },
+      findRestaurant: { 'zh-HK': '🍽️ 去 OpenRice 搵餐廳', 'zh-CN': '📍 去大众点评找餐厅', en: '📍 Find on Google Maps', ja: '📍 Google Mapsで探す', ko: '📍 Google Maps에서 찾기', fr: '📍 Trouver sur Google Maps' }
     };
 
     function t(key) { return UI[key]?.[currentLang] || UI[key]?.['en'] || ''; }
@@ -570,6 +596,30 @@
     function colorName(c) { return c.n[currentLang] || c.n.en; }
     function getSpinMsgs() { return SPIN_MESSAGES[currentLang] || SPIN_MESSAGES.en; }
 
+    function buildPlatformUrl(dish, category) {
+      const dn = dishName(dish);
+      if (currentLang === 'zh-CN') {
+        const restaurant = dn.split('·')[0] || dn;
+        return 'https://www.dianping.com/search/keyword/14/0_' + encodeURIComponent(restaurant);
+      }
+      if (currentLang === 'zh-HK') {
+        const keyword = catName(category) + ' ' + dn;
+        return 'https://www.openrice.com/zh/hongkong/restaurants?what=' + encodeURIComponent(keyword) + '&where=%E9%8A%85%E9%91%BC%E7%81%A3';
+      }
+      const keyword = dn + ' ' + catName(category);
+      return 'https://www.google.com/maps/search/' + encodeURIComponent(keyword + ' Times Square Causeway Bay Hong Kong');
+    }
+    function getPlatformName() {
+      if (currentLang === 'zh-CN') return '大众点评';
+      if (currentLang === 'zh-HK') return 'OpenRice';
+      return 'Google Maps';
+    }
+    function getPlatformIcon() {
+      if (currentLang === 'zh-CN') return '📍';
+      if (currentLang === 'zh-HK') return '🍽️';
+      return '📍';
+    }
+
     function getDailySeed(date) {
       const d = date || new Date();
       const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
@@ -633,6 +683,7 @@
       $('section-divider').textContent = t('sectionDivider');
       $('btn-accept').textContent = t('btnAccept');
       $('btn-redraw').textContent = t('btnRedraw');
+      $('btn-find-restaurant').textContent = t('findRestaurant');
       $('btn-share').textContent = t('btnShare');
       $('btn-browse').textContent = t('btnBrowse');
       $('btn-back-home').textContent = t('btnBack');
@@ -673,6 +724,8 @@
       card.style.animation = 'none';
       card.offsetHeight;
       card.style.animation = '';
+      $('btn-find-restaurant').textContent = t('findRestaurant');
+      $('btn-find-restaurant').onclick = () => window.open(buildPlatformUrl(dish, category), '_blank');
     }
 
     function renderDishes(cat) {
@@ -684,7 +737,9 @@
             <div class="dish-primary">${dishName(d)}</div>
             <div class="dish-secondary">${dishSub(d)}</div>
           </div>
-          <span class="dish-arrow">›</span>
+          <a class="dish-external-link" href="${buildPlatformUrl(d, cat)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            ${getPlatformIcon()} ${getPlatformName()} ›
+          </a>
         </div>`).join('');
     }
 
