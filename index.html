@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F0F0F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Lunch Oracle" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Lunch Oracle 午餐神諭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0F0F0F;
+      --surface: #1A1A1A;
+      --surface-elevated: #242424;
+      --primary: #FF6B35;
+      --primary-dim: rgba(255, 107, 53, 0.15);
+      --primary-glow: rgba(255, 107, 53, 0.4);
+      --secondary: #00D9A5;
+      --gold: #FFD700;
+      --gold-dim: rgba(255, 215, 0, 0.15);
+      --purple: #9B6DFF;
+      --purple-dim: rgba(155, 109, 255, 0.15);
+      --text-primary: #FFFFFF;
+      --text-secondary: #A3A3A3;
+      --text-muted: #737373;
+      --border: #2D2D2D;
+      --border-light: #3D3D3D;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 28px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Outfit', 'Noto Sans TC', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body {
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+
+    #app { position: relative; width: 100%; min-height: 100vh; overflow: hidden; }
+
+    .screen {
+      position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh;
+      transform: translateX(100%); opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+      pointer-events: none; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding-bottom: 40px;
+    }
+    .screen.active { position: relative; transform: translateX(0); opacity: 1; pointer-events: auto; }
+
+    /* === LANGUAGE SWITCHER === */
+    .lang-bar {
+      display: flex; justify-content: center; gap: 6px;
+      padding: 16px 16px 0; flex-wrap: wrap;
+    }
+    .lang-btn {
+      padding: 6px 10px; border-radius: 20px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-muted); font-size: 13px;
+      cursor: pointer; touch-action: manipulation;
+      font-family: inherit; transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .lang-btn.active {
+      background: var(--primary-dim); border-color: var(--primary);
+      color: var(--primary); font-weight: 600;
+    }
+    .lang-btn:active { transform: scale(0.95); }
+
+    /* === HOME SCREEN === */
+    .home-header { padding: 16px 20px 8px; text-align: center; }
+    .home-header h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+    .home-header .subtitle { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+
+    .fortune-banner {
+      margin: 16px 16px 0;
+      background: linear-gradient(135deg, rgba(155, 109, 255, 0.12), rgba(255, 215, 0, 0.10));
+      border: 1px solid rgba(155, 109, 255, 0.25);
+      border-radius: var(--radius-xl); padding: 18px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .fortune-banner::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(155, 109, 255, 0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .fortune-banner .element-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+    .fortune-banner .element-emoji { font-size: 26px; }
+    .fortune-banner .element-name { font-size: 16px; font-weight: 700; color: var(--gold); }
+    .fortune-banner .fortune-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .fortune-banner .fortune-stars { margin-top: 8px; font-size: 16px; letter-spacing: 2px; }
+    .fortune-banner .fortune-stars .star-filled { color: var(--gold); }
+    .fortune-banner .fortune-stars .star-empty { color: var(--border-light); }
+    .fortune-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    .draw-section { padding: 20px 16px 12px; text-align: center; }
+    .draw-btn {
+      width: 100%; padding: 18px 24px;
+      background: linear-gradient(135deg, var(--primary), #FF8F35);
+      border: none; border-radius: var(--radius-xl);
+      color: #fff; font-size: 19px; font-weight: 800;
+      font-family: inherit; cursor: pointer; touch-action: manipulation;
+      transition: transform 0.1s ease;
+      box-shadow: 0 4px 24px var(--primary-glow);
+      animation: btnPulse 2.5s ease-in-out infinite;
+    }
+    .draw-btn:active { transform: scale(0.97); animation: none; }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 4px 24px var(--primary-glow); }
+      50% { box-shadow: 0 4px 40px rgba(255, 107, 53, 0.6); }
+    }
+    .pick-yourself-link {
+      display: block; margin-top: 14px; font-size: 13px; color: var(--text-muted);
+      text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit;
+    }
+
+    .section-divider {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 20px 12px; color: var(--text-muted); font-size: 12px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 16px 32px; }
+    .category-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 14px 6px;
+      text-align: center; cursor: pointer;
+      transition: transform 0.1s ease, background 0.2s ease;
+      touch-action: manipulation; min-height: 90px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    }
+    .category-card:active { transform: scale(0.95); background: var(--surface-elevated); }
+    .category-card .emoji { font-size: 32px; line-height: 1; }
+    .category-card .cat-name { font-size: 13px; font-weight: 600; }
+    .category-card .cat-sub { font-size: 10px; color: var(--text-muted); }
+
+    /* === DIVINATION === */
+    .divine-screen { background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .divine-circle {
+      width: 200px; height: 200px; border-radius: 50%;
+      border: 2px solid rgba(155, 109, 255, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; animation: circleGlow 2s ease-in-out infinite;
+    }
+    @keyframes circleGlow {
+      0%, 100% { border-color: rgba(155, 109, 255, 0.3); box-shadow: 0 0 30px rgba(155, 109, 255, 0.1); }
+      50% { border-color: rgba(155, 109, 255, 0.6); box-shadow: 0 0 60px rgba(155, 109, 255, 0.25); }
+    }
+    .divine-circle::before {
+      content: '☯'; position: absolute; font-size: 180px; color: rgba(155, 109, 255, 0.06);
+      animation: yinYangSpin 8s linear infinite;
+    }
+    @keyframes yinYangSpin { to { transform: rotate(360deg); } }
+    .slot-emoji { font-size: 72px; z-index: 2; transition: filter 0.1s ease; }
+    .slot-emoji.spinning { filter: blur(4px); }
+    .divine-message { margin-top: 28px; font-size: 16px; font-weight: 600; color: var(--purple); text-align: center; min-height: 24px; }
+    .divine-sub { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
+
+    /* === RESULT === */
+    .result-content { padding: 0 16px; }
+    .tarot-card {
+      background: linear-gradient(160deg, #1E1E2E, #1A1A2A);
+      border: 1px solid rgba(155, 109, 255, 0.3);
+      border-radius: var(--radius-2xl); padding: 24px 18px;
+      margin: 16px 0; text-align: center;
+      position: relative; overflow: hidden;
+      transform-style: preserve-3d;
+      animation: cardReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes cardReveal {
+      0% { transform: perspective(800px) rotateY(90deg); opacity: 0; }
+      100% { transform: perspective(800px) rotateY(0deg); opacity: 1; }
+    }
+    .tarot-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.06), transparent 60%);
+      pointer-events: none;
+    }
+    .tarot-card .card-label { font-size: 11px; color: var(--purple); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 600; }
+    .tarot-card .card-emoji { font-size: 60px; margin-bottom: 10px; }
+    .tarot-card .card-dish-primary { font-size: 24px; font-weight: 900; }
+    .tarot-card .card-dish-secondary { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+    .tarot-card .card-category { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .divination-copy { margin-top: 18px; padding: 14px 16px; background: var(--purple-dim); border-radius: var(--radius-md); font-size: 14px; line-height: 1.6; color: #C9B8FF; }
+    .element-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 6px 14px; background: var(--gold-dim); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 20px; font-size: 12px; color: var(--gold); font-weight: 600; }
+    .fortune-score { margin-top: 10px; font-size: 14px; color: var(--text-muted); }
+    .fortune-score .star-filled { color: var(--gold); font-size: 18px; }
+    .fortune-score .star-empty { color: var(--border-light); font-size: 18px; }
+
+    .result-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; }
+    .btn-accept { width: 100%; padding: 16px; background: var(--secondary); border: none; border-radius: var(--radius-lg); color: #000; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; touch-action: manipulation; transition: transform 0.1s ease; }
+    .btn-accept:active { transform: scale(0.98); }
+    .btn-redraw { width: 100%; padding: 14px; background: var(--primary-dim); border: 1px solid var(--primary); border-radius: var(--radius-lg); color: var(--primary); font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; touch-action: manipulation; transition: transform 0.1s ease; }
+    .btn-redraw:active { transform: scale(0.98); }
+    .btn-row { display: flex; gap: 10px; }
+    .btn-share { flex: 1; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-secondary); font-size: 14px; font-family: inherit; cursor: pointer; touch-action: manipulation; transition: background 0.2s ease; }
+    .btn-share:active { background: var(--surface-elevated); }
+    .btn-browse { flex: 1; padding: 14px; background: transparent; border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-muted); font-size: 14px; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+
+    /* === DISH SCREEN === */
+    .screen-header { display: flex; align-items: center; gap: 12px; padding: 20px 16px 12px; position: sticky; top: 0; background: var(--bg); z-index: 10; border-bottom: 1px solid var(--border); }
+    .back-btn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 14px; padding: 8px 12px; cursor: pointer; touch-action: manipulation; font-family: inherit; transition: background 0.2s ease; }
+    .back-btn:active { background: var(--surface-elevated); }
+    .screen-header h2 { font-size: 20px; font-weight: 600; flex: 1; }
+    .just-category-btn { display: block; width: calc(100% - 32px); margin: 16px auto 8px; padding: 14px 16px; background: var(--primary-dim); border: 1px solid var(--primary); border-radius: var(--radius-md); color: var(--primary); font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; touch-action: manipulation; text-align: center; transition: transform 0.1s ease; }
+    .just-category-btn:active { transform: scale(0.98); }
+    .dish-divider { padding: 12px 20px 8px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .dish-list { padding: 0 16px 32px; }
+    .dish-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 8px; cursor: pointer; touch-action: manipulation; transition: transform 0.1s ease, background 0.2s ease; }
+    .dish-card:active { transform: scale(0.98); background: var(--surface-elevated); }
+    .dish-card .dish-names { flex: 1; }
+    .dish-card .dish-primary { font-size: 16px; font-weight: 600; }
+    .dish-card .dish-secondary { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .dish-card .dish-arrow { color: var(--text-muted); font-size: 18px; }
+
+    .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface-elevated); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 12px 24px; font-size: 14px; color: var(--secondary); font-weight: 600; opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; z-index: 100; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 768px) {
+      ::-webkit-scrollbar { display: none; }
+      * { scrollbar-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <section id="screen-home" class="screen active">
+      <div id="lang-bar" class="lang-bar"></div>
+      <header class="home-header">
+        <h1 id="home-title"></h1>
+        <div id="home-subtitle" class="subtitle"></div>
+      </header>
+      <div id="fortune-banner" class="fortune-banner"></div>
+      <div class="draw-section">
+        <button id="btn-draw" class="draw-btn"></button>
+        <button id="btn-pick-yourself" class="pick-yourself-link"></button>
+      </div>
+      <div id="section-divider" class="section-divider"></div>
+      <div id="category-grid" class="category-grid"></div>
+    </section>
+
+    <section id="screen-divine" class="screen divine-screen">
+      <div class="divine-circle">
+        <div id="slot-emoji" class="slot-emoji">🔮</div>
+      </div>
+      <div id="divine-message" class="divine-message"></div>
+      <div id="divine-sub" class="divine-sub"></div>
+    </section>
+
+    <section id="screen-result" class="screen">
+      <div class="result-content">
+        <div id="tarot-card" class="tarot-card"></div>
+        <div class="result-actions">
+          <button id="btn-accept" class="btn-accept"></button>
+          <button id="btn-redraw" class="btn-redraw"></button>
+          <div class="btn-row">
+            <button id="btn-share" class="btn-share"></button>
+            <button id="btn-browse" class="btn-browse"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-dishes" class="screen">
+      <div class="screen-header">
+        <button id="btn-back-home" class="back-btn"></button>
+        <h2 id="dish-header-title"></h2>
+      </div>
+      <button id="btn-just-category" class="just-category-btn"></button>
+      <div id="dish-divider-text" class="dish-divider"></div>
+      <div id="dish-list" class="dish-list"></div>
+    </section>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // =============================================
+    // LANGUAGE SYSTEM
+    // =============================================
+    const LANGUAGES = [
+      { code: 'zh-HK', flag: '🇭🇰', label: '繁中' },
+      { code: 'zh-CN', flag: '🇨🇳', label: '简中' },
+      { code: 'en',    flag: '🇬🇧', label: 'EN' },
+      { code: 'ja',    flag: '🇯🇵', label: 'JP' },
+      { code: 'ko',    flag: '🇰🇷', label: 'KR' },
+      { code: 'fr',    flag: '🇫🇷', label: 'FR' }
+    ];
+
+    let currentLang = localStorage.getItem('lunchOracleLang') || 'zh-HK';
+
+    const UI = {
+      title:          { 'zh-HK': '🔮 今日食乜好？', 'zh-CN': '🔮 今天吃什么？', en: '🔮 What to Eat Today?', ja: '🔮 今日何食べる？', ko: '🔮 오늘 뭐 먹지?', fr: '🔮 On mange quoi ?' },
+      subtitle:       { 'zh-HK': 'Times Square 午餐神諭 Lunch Oracle', 'zh-CN': '黄龙国际中心 · 午餐神谕', en: 'Times Square Lunch Oracle', ja: 'Times Square ランチ神託', ko: 'Times Square 점심 신탁', fr: 'Times Square · Oracle du Déjeuner' },
+      drawBtn:        { 'zh-HK': '🎴 求籤！Draw Your Lunch Fortune', 'zh-CN': '🎴 求签！抽取你的午餐运势', en: '🎴 Draw Your Lunch Fortune!', ja: '🎴 おみくじを引く！', ko: '🎴 점심 운세 뽑기!', fr: '🎴 Tirez votre carte déjeuner !' },
+      pickYourself:   { 'zh-HK': '或自己揀 Or pick yourself ↓', 'zh-CN': '或者自己选 ↓', en: 'Or pick yourself ↓', ja: 'または自分で選ぶ ↓', ko: '또는 직접 선택 ↓', fr: 'Ou choisissez vous-même ↓' },
+      sectionDivider: { 'zh-HK': '自己揀 Pick yourself', 'zh-CN': '自己选', en: 'Pick yourself', ja: '自分で選ぶ', ko: '직접 선택', fr: 'Choisir soi-même' },
+      todayElement:   { 'zh-HK': '今日五行：', 'zh-CN': '今日五行：', en: "Today's Element: ", ja: '今日の五行：', ko: '오늘의 오행: ', fr: "Élément du jour : " },
+      lunchFortune:   { 'zh-HK': '午餐運勢 Lunch Fortune', 'zh-CN': '午餐运势', en: 'Lunch Fortune', ja: 'ランチ運勢', ko: '점심 운세', fr: 'Fortune du déjeuner' },
+      oracleLabel:    { 'zh-HK': '今日午餐神諭 Lunch Oracle', 'zh-CN': '今日午餐神谕', en: "Today's Lunch Oracle", ja: '今日のランチ神託', ko: '오늘의 점심 신탁', fr: 'Oracle du Déjeuner' },
+      btnAccept:      { 'zh-HK': '✅ 就係佢！就食呢個', 'zh-CN': '✅ 就是它！就吃这个', en: '✅ This is it! Let\'s eat!', ja: '✅ これに決めた！', ko: '✅ 이거다! 먹자!', fr: '✅ C\'est décidé ! On y va !' },
+      btnRedraw:      { 'zh-HK': '🔄 唔啱！再求一次', 'zh-CN': '🔄 不行！再来一次', en: '🔄 Nah! Draw again', ja: '🔄 もう一回引く！', ko: '🔄 다시 뽑기!', fr: '🔄 Non ! Retirer une carte' },
+      btnShare:       { 'zh-HK': '📋 分享', 'zh-CN': '📋 分享', en: '📋 Share', ja: '📋 シェア', ko: '📋 공유', fr: '📋 Partager' },
+      btnBrowse:      { 'zh-HK': '📂 自己揀', 'zh-CN': '📂 自己选', en: '📂 Browse', ja: '📂 自分で選ぶ', ko: '📂 직접 선택', fr: '📂 Parcourir' },
+      btnBack:        { 'zh-HK': '← 返回', 'zh-CN': '← 返回', en: '← Back', ja: '← 戻る', ko: '← 돌아가기', fr: '← Retour' },
+      justCategory:   { 'zh-HK': '就要{name}！', 'zh-CN': '就要{name}！', en: 'Just {name}!', ja: '{name}でお願い！', ko: '{name}으로 할래!', fr: '{name}, tout simplement !' },
+      dishDivider:    { 'zh-HK': '或揀一個餸 or pick a dish', 'zh-CN': '或者选一道菜', en: 'Or pick a dish', ja: 'または料理を選ぶ', ko: '또는 요리 선택', fr: 'Ou choisir un plat' },
+      fortuneRevealed:{ 'zh-HK': '神諭已出！', 'zh-CN': '神谕已出！', en: 'Fortune revealed!', ja: '神託が出ました！', ko: '신탁이 나왔습니다!', fr: 'La carte est révélée !' },
+      enjoyMeal:      { 'zh-HK': '🎉 食嘅開心！', 'zh-CN': '🎉 吃得开心！', en: '🎉 Enjoy your meal!', ja: '🎉 いただきます！', ko: '🎉 맛있게 드세요!', fr: '🎉 Bon appétit !' },
+      copied:         { 'zh-HK': '✅ 已複製！', 'zh-CN': '✅ 已复制！', en: '✅ Copied!', ja: '✅ コピーしました！', ko: '✅ 복사됨!', fr: '✅ Copié !' },
+      luckyColor:     { 'zh-HK': '幸運色：', 'zh-CN': '幸运色：', en: 'Lucky color: ', ja: 'ラッキーカラー：', ko: '행운의 색: ', fr: 'Couleur porte-bonheur : ' },
+      elementSuffix:  { 'zh-HK': '行', 'zh-CN': '行', en: '', ja: '行', ko: '행', fr: '' }
+    };
+
+    function t(key) { return UI[key]?.[currentLang] || UI[key]?.['en'] || ''; }
+
+    // =============================================
+    // FOOD DATA (multi-language)
+    // =============================================
+    const FOOD_DATA = [
+      { id:'chinese', emoji:'🥡',
+        name:{'zh-HK':'粵菜','zh-CN':'杭帮菜',en:'Chinese',ja:'中華料理',ko:'중국요리',fr:'Chinois'},
+        sub:{'zh-HK':'Chinese','zh-CN':'外婆家/绿茶',en:'Cantonese',ja:'Chinese',ko:'Chinese',fr:'Cantonais'},
+        dishes:[
+          {n:{'zh-HK':'叉燒飯','zh-CN':'外婆家·茶香鸡',en:'BBQ Pork Rice',ja:'チャーシュー丼',ko:'차슈덮밥',fr:'Riz au porc laqué'}},
+          {n:{'zh-HK':'雲吞麵','zh-CN':'外婆家·西湖醋鱼',en:'Wonton Noodle',ja:'ワンタン麺',ko:'완탕면',fr:'Nouilles aux wontons'}},
+          {n:{'zh-HK':'煲仔飯','zh-CN':'外婆家·外婆红烧肉',en:'Claypot Rice',ja:'土鍋ご飯',ko:'뚝배기밥',fr:'Riz en cocotte'}},
+          {n:{'zh-HK':'點心','zh-CN':'绿茶·绿茶烤鸡',en:'Dim Sum',ja:'飲茶・点心',ko:'딤섬',fr:'Dim Sum'}},
+          {n:{'zh-HK':'燒鵝','zh-CN':'绿茶·面包诱惑',en:'Roast Goose',ja:'ローストグース',ko:'로스트 거위',fr:'Oie rôtie'}},
+          {n:{'zh-HK':'蒸魚','zh-CN':'绿茶·石锅鸡汤豆腐',en:'Steamed Fish',ja:'蒸し魚',ko:'찐 생선',fr:'Poisson vapeur'}}
+      ]},
+      { id:'japanese', emoji:'🍣',
+        name:{'zh-HK':'日本料理','zh-CN':'日料',en:'Japanese',ja:'和食',ko:'일식',fr:'Japonais'},
+        sub:{'zh-HK':'Japanese','zh-CN':'竹里·栩/和一',en:'Sushi & more',ja:'和食',ko:'Japanese',fr:'Sushi & plus'},
+        dishes:[
+          {n:{'zh-HK':'刺身丼','zh-CN':'竹里·栩·刺身拼盘',en:'Sashimi Don',ja:'海鮮丼',ko:'사시미동',fr:'Chirashi'}},
+          {n:{'zh-HK':'拉麵','zh-CN':'和一料理·豚骨拉面',en:'Ramen',ja:'ラーメン',ko:'라멘',fr:'Ramen'}},
+          {n:{'zh-HK':'吉列豬扒飯','zh-CN':'竹里·栩·寿司套餐',en:'Katsu Don',ja:'カツ丼',ko:'카츠동',fr:'Katsu Don'}},
+          {n:{'zh-HK':'烏冬','zh-CN':'和一料理·天妇罗定食',en:'Udon',ja:'うどん',ko:'우동',fr:'Udon'}},
+          {n:{'zh-HK':'便當','zh-CN':'和一料理·鳗鱼饭',en:'Bento Box',ja:'お弁当',ko:'벤토',fr:'Bento'}},
+          {n:{'zh-HK':'日式咖喱飯','zh-CN':'竹里·栩·日式自助',en:'Japanese Curry',ja:'カレーライス',ko:'일본카레',fr:'Curry japonais'}}
+      ]},
+      { id:'korean', emoji:'🍱',
+        name:{'zh-HK':'韓國料理','zh-CN':'海鲜大排档',en:'Korean',ja:'韓国料理',ko:'한식',fr:'Coréen'},
+        sub:{'zh-HK':'Korean','zh-CN':'黄龙玉古路',en:'K-food',ja:'Korean',ko:'한식',fr:'K-food'},
+        dishes:[
+          {n:{'zh-HK':'拌飯','zh-CN':'黄龙海鲜·椒盐皮皮虾',en:'Bibimbap',ja:'ビビンバ',ko:'비빔밥',fr:'Bibimbap'}},
+          {n:{'zh-HK':'泡菜湯','zh-CN':'黄龙海鲜·东海三鲜',en:'Kimchi Stew',ja:'キムチチゲ',ko:'김치찌개',fr:'Ragoût de kimchi'}},
+          {n:{'zh-HK':'韓式炸雞','zh-CN':'黄龙海鲜·海鲜炒粉干',en:'Korean Fried Chicken',ja:'ヤンニョムチキン',ko:'양념치킨',fr:'Poulet frit coréen'}},
+          {n:{'zh-HK':'烤肉','zh-CN':'黄龙海鲜·清蒸大闸蟹',en:'Bulgogi',ja:'プルコギ',ko:'불고기',fr:'Bulgogi'}},
+          {n:{'zh-HK':'辣炒年糕','zh-CN':'黄龙海鲜·白灼基围虾',en:'Tteokbokki',ja:'トッポギ',ko:'떡볶이',fr:'Tteokbokki'}},
+          {n:{'zh-HK':'部隊鍋','zh-CN':'黄龙海鲜·葱油梭子蟹',en:'Army Stew',ja:'ブデチゲ',ko:'부대찌개',fr:'Budae-jjigae'}}
+      ]},
+      { id:'thai', emoji:'🍛',
+        name:{'zh-HK':'泰國菜','zh-CN':'东南亚菜',en:'Thai',ja:'タイ料理',ko:'태국요리',fr:'Thaïlandais'},
+        sub:{'zh-HK':'Thai','zh-CN':'南洋往事',en:'Spicy & sweet',ja:'Thai',ko:'Thai',fr:'Épicé & doux'},
+        dishes:[
+          {n:{'zh-HK':'泰式炒河粉','zh-CN':'南洋往事·海南鸡饭',en:'Pad Thai',ja:'パッタイ',ko:'팟타이',fr:'Pad Thaï'}},
+          {n:{'zh-HK':'綠咖喱','zh-CN':'南洋往事·叻沙',en:'Green Curry',ja:'グリーンカレー',ko:'그린커리',fr:'Curry vert'}},
+          {n:{'zh-HK':'冬陰功湯','zh-CN':'南洋往事·冬阴功汤',en:'Tom Yum Soup',ja:'トムヤムクン',ko:'똠양꿍',fr:'Tom Yum'}},
+          {n:{'zh-HK':'芒果糯米飯','zh-CN':'南洋往事·肉骨茶',en:'Mango Sticky Rice',ja:'マンゴーもち米',ko:'망고찹쌀밥',fr:'Riz gluant à la mangue'}},
+          {n:{'zh-HK':'打拋豬飯','zh-CN':'南洋往事·咖喱叻沙面',en:'Basil Chicken Rice',ja:'ガパオライス',ko:'까파오라이스',fr:'Riz au basilic thaï'}},
+          {n:{'zh-HK':'菠蘿飯','zh-CN':'南洋往事·椰浆饭',en:'Pineapple Rice',ja:'パイナップル炒飯',ko:'파인애플볶음밥',fr:'Riz à l\'ananas'}}
+      ]},
+      { id:'vietnamese', emoji:'🍜',
+        name:{'zh-HK':'越南菜','zh-CN':'面馆',en:'Vietnamese',ja:'ベトナム料理',ko:'베트남요리',fr:'Vietnamien'},
+        sub:{'zh-HK':'Vietnamese','zh-CN':'苏面坊/慧娟/相缘',en:'Fresh & light',ja:'Vietnamese',ko:'Vietnamese',fr:'Frais & léger'},
+        dishes:[
+          {n:{'zh-HK':'越南牛肉粉','zh-CN':'苏面坊·秃黄油面',en:'Pho',ja:'フォー',ko:'쌀국수',fr:'Phở'}},
+          {n:{'zh-HK':'越南法包','zh-CN':'苏面坊·蟹粉虾仁面',en:'Banh Mi',ja:'バインミー',ko:'반미',fr:'Bánh mì'}},
+          {n:{'zh-HK':'越南春卷','zh-CN':'慧娟面馆·片儿川',en:'Spring Rolls',ja:'生春巻き',ko:'스프링롤',fr:'Rouleaux de printemps'}},
+          {n:{'zh-HK':'越南豬肉檬粉','zh-CN':'慧娟面馆·爆鳝面',en:'Bun Cha',ja:'ブンチャー',ko:'분짜',fr:'Bun Cha'}},
+          {n:{'zh-HK':'碎米飯','zh-CN':'相缘面馆·大排面',en:'Broken Rice',ja:'コムタム',ko:'꼼땀',fr:'Riz brisé'}},
+          {n:{'zh-HK':'越南咖啡','zh-CN':'相缘面馆·酸菜牛腩面',en:'Vietnamese Coffee',ja:'ベトナムコーヒー',ko:'베트남커피',fr:'Café vietnamien'}}
+      ]},
+      { id:'western', emoji:'🍔',
+        name:{'zh-HK':'西餐','zh-CN':'西餐',en:'Western',ja:'洋食',ko:'양식',fr:'Occidental'},
+        sub:{'zh-HK':'Western','zh-CN':'WADE\'S/必胜客',en:'Burgers & more',ja:'Western',ko:'Western',fr:'Burgers & plus'},
+        dishes:[
+          {n:{'zh-HK':'漢堡','zh-CN':'WADE\'S·安格斯牛排',en:'Burger',ja:'ハンバーガー',ko:'버거',fr:'Burger'}},
+          {n:{'zh-HK':'意粉','zh-CN':'WADE\'S·墨鱼汁烩饭',en:'Pasta',ja:'パスタ',ko:'파스타',fr:'Pâtes'}},
+          {n:{'zh-HK':'牛扒','zh-CN':'WADE\'S·经典汉堡',en:'Steak',ja:'ステーキ',ko:'스테이크',fr:'Steak'}},
+          {n:{'zh-HK':'薄餅','zh-CN':'必胜客·超级至尊披萨',en:'Pizza',ja:'ピザ',ko:'피자',fr:'Pizza'}},
+          {n:{'zh-HK':'炸魚薯條','zh-CN':'必胜客·意式肉酱面',en:'Fish & Chips',ja:'フィッシュ＆チップス',ko:'피시앤칩스',fr:'Fish & Chips'}},
+          {n:{'zh-HK':'三文治','zh-CN':'必胜客·新奥尔良烤翅',en:'Sandwich',ja:'サンドイッチ',ko:'샌드위치',fr:'Sandwich'}}
+      ]},
+      { id:'taiwanese', emoji:'🧋',
+        name:{'zh-HK':'台灣菜','zh-CN':'煲仔饭/炖汤',en:'Taiwanese',ja:'台湾料理',ko:'대만요리',fr:'Taïwanais'},
+        sub:{'zh-HK':'Taiwanese','zh-CN':'煮饭佬K-Lab',en:'Street food',ja:'Taiwanese',ko:'Taiwanese',fr:'Street food'},
+        dishes:[
+          {n:{'zh-HK':'滷肉飯','zh-CN':'煮饭佬·腊味煲仔饭',en:'Braised Pork Rice',ja:'ルーロー飯',ko:'루로우판',fr:'Riz au porc braisé'}},
+          {n:{'zh-HK':'牛肉麵','zh-CN':'煮饭佬·窝蛋牛肉煲仔饭',en:'Beef Noodle Soup',ja:'牛肉麺',ko:'우육면',fr:'Soupe de nouilles au bœuf'}},
+          {n:{'zh-HK':'鹽酥雞','zh-CN':'煮饭佬·滑鸡煲仔饭',en:'Popcorn Chicken',ja:'鹹酥鶏',ko:'옌수지',fr:'Poulet popcorn'}},
+          {n:{'zh-HK':'小籠包','zh-CN':'煮饭佬·豉汁排骨煲仔饭',en:'Xiao Long Bao',ja:'小籠包',ko:'샤오롱바오',fr:'Xiao Long Bao'}},
+          {n:{'zh-HK':'蔥油餅','zh-CN':'煮饭佬·北菇鸡炖盅',en:'Scallion Pancake',ja:'葱油餅',ko:'파전병',fr:'Crêpe à la ciboule'}},
+          {n:{'zh-HK':'珍珠奶茶','zh-CN':'煮饭佬·花胶鸡炖汤',en:'Bubble Tea',ja:'タピオカミルクティー',ko:'버블티',fr:'Bubble Tea'}}
+      ]},
+      { id:'indian', emoji:'🫓',
+        name:{'zh-HK':'印度菜','zh-CN':'火锅',en:'Indian',ja:'インド料理',ko:'인도요리',fr:'Indien'},
+        sub:{'zh-HK':'Indian','zh-CN':'川炉/御牛道',en:'Curry & spice',ja:'Indian',ko:'Indian',fr:'Curry & épices'},
+        dishes:[
+          {n:{'zh-HK':'牛油雞','zh-CN':'川炉·麻辣牛油锅',en:'Butter Chicken',ja:'バターチキン',ko:'버터치킨',fr:'Poulet au beurre'}},
+          {n:{'zh-HK':'印度炒飯','zh-CN':'川炉·番茄锅',en:'Biryani',ja:'ビリヤニ',ko:'비리야니',fr:'Biryani'}},
+          {n:{'zh-HK':'烤餅配咖喱','zh-CN':'川炉·鸳鸯锅',en:'Naan + Curry',ja:'ナン＋カレー',ko:'난+카레',fr:'Naan + Curry'}},
+          {n:{'zh-HK':'坦都里雞','zh-CN':'御牛道·潮汕牛肉锅',en:'Tandoori Chicken',ja:'タンドリーチキン',ko:'탄두리치킨',fr:'Poulet tandoori'}},
+          {n:{'zh-HK':'咖喱角','zh-CN':'御牛道·手切鲜牛肉',en:'Samosa',ja:'サモサ',ko:'사모사',fr:'Samosa'}},
+          {n:{'zh-HK':'印度扁豆','zh-CN':'御牛道·牛肉丸拼盘',en:'Dal Makhani',ja:'ダール',ko:'달 마카니',fr:'Dal Makhani'}}
+      ]},
+      { id:'salad-healthy', emoji:'🥗',
+        name:{'zh-HK':'沙律/健康餐','zh-CN':'轻食简餐',en:'Salad / Healthy',ja:'サラダ・ヘルシー',ko:'샐러드/건강식',fr:'Salade / Healthy'},
+        sub:{'zh-HK':'Healthy','zh-CN':'黄龙周边',en:'Light & fresh',ja:'Healthy',ko:'Healthy',fr:'Léger & frais'},
+        dishes:[
+          {n:{'zh-HK':'夏威夷魚生飯','zh-CN':'沙拉到·鸡胸肉沙拉',en:'Poke Bowl',ja:'ポキ丼',ko:'포케볼',fr:'Poké Bowl'}},
+          {n:{'zh-HK':'巴西莓碗','zh-CN':'鲜果时间·酸奶果昔碗',en:'Acai Bowl',ja:'アサイーボウル',ko:'아사이볼',fr:'Bol d\'açaï'}},
+          {n:{'zh-HK':'雞肉沙律','zh-CN':'轻食·藜麦牛肉碗',en:'Chicken Salad',ja:'チキンサラダ',ko:'치킨샐러드',fr:'Salade de poulet'}},
+          {n:{'zh-HK':'穀物碗','zh-CN':'轻食·三文鱼牛油果碗',en:'Grain Bowl',ja:'グレインボウル',ko:'곡물볼',fr:'Bol de céréales'}},
+          {n:{'zh-HK':'湯品套餐','zh-CN':'黄龙饭店·养生汤定食',en:'Soup Set',ja:'スープセット',ko:'수프세트',fr:'Formule soupe'}},
+          {n:{'zh-HK':'墨西哥卷','zh-CN':'轻食·全麦鸡肉卷',en:'Wrap',ja:'ラップサンド',ko:'랩',fr:'Wrap'}}
+      ]},
+      { id:'fast-food', emoji:'🍟',
+        name:{'zh-HK':'快餐','zh-CN':'快餐',en:'Fast Food',ja:'ファストフード',ko:'패스트푸드',fr:'Fast-food'},
+        sub:{'zh-HK':'Fast Food','zh-CN':'麦当劳/老乡鸡',en:'Quick & easy',ja:'Fast Food',ko:'Fast Food',fr:'Rapide'},
+        dishes:[
+          {n:{'zh-HK':'麥當勞套餐','zh-CN':'麦当劳·巨无霸套餐',en:"McDonald's Set",ja:'マクドナルド',ko:'맥도날드세트',fr:'Menu McDonald\'s'}},
+          {n:{'zh-HK':'肯德基','zh-CN':'肯德基·吮指原味鸡',en:'KFC',ja:'ケンタッキー',ko:'KFC',fr:'KFC'}},
+          {n:{'zh-HK':'吉野家','zh-CN':'老乡鸡·老母鸡汤套餐',en:'Yoshinoya',ja:'吉野家',ko:'요시노야',fr:'Yoshinoya'}},
+          {n:{'zh-HK':'大快活','zh-CN':'大米先生·小炒肉套餐',en:'Fairwood',ja:'大快活',ko:'페어우드',fr:'Fairwood'}},
+          {n:{'zh-HK':'大家樂','zh-CN':'吉野家·牛肉饭',en:'Cafe de Coral',ja:'大家楽',ko:'카페드코랄',fr:'Café de Coral'}},
+          {n:{'zh-HK':'美心MX','zh-CN':'汉堡王·皇堡套餐',en:"Maxim's",ja:'美心MX',ko:'막심스',fr:"Maxim's"}}
+      ]},
+      { id:'congee-noodles', emoji:'🍲',
+        name:{'zh-HK':'粥麵','zh-CN':'小吃',en:'Congee / Noodles',ja:'お粥・麺',ko:'죽/면',fr:'Congee / Nouilles'},
+        sub:{'zh-HK':'Congee','zh-CN':'新丰/知味观',en:'Comfort food',ja:'Congee',ko:'Congee',fr:'Réconfortant'},
+        dishes:[
+          {n:{'zh-HK':'粥','zh-CN':'新丰小吃·虾肉小笼',en:'Congee',ja:'お粥',ko:'죽',fr:'Congee'}},
+          {n:{'zh-HK':'車仔麵','zh-CN':'新丰小吃·牛肉粉丝',en:'Cart Noodle',ja:'車仔麺',ko:'카트누들',fr:'Nouilles de chariot'}},
+          {n:{'zh-HK':'魚蛋粉','zh-CN':'知味观·猫耳朵',en:'Fish Ball Noodle',ja:'魚団子麺',ko:'어묵국수',fr:'Nouilles aux boulettes'}},
+          {n:{'zh-HK':'牛腩麵','zh-CN':'知味观·小笼包',en:'Beef Brisket Noodle',ja:'牛バラ麺',ko:'우삼겹국수',fr:'Nouilles au bœuf'}},
+          {n:{'zh-HK':'腸粉','zh-CN':'知味观·片儿川',en:'Rice Noodle Roll',ja:'腸粉',ko:'장분',fr:'Rouleaux de riz'}},
+          {n:{'zh-HK':'撈麵','zh-CN':'新丰小吃·大肉包',en:'Lo Mein',ja:'撈麺',ko:'로메인',fr:'Lo Mein'}}
+      ]},
+      { id:'desserts-drinks', emoji:'🧁',
+        name:{'zh-HK':'甜品/飲品','zh-CN':'茶饮甜品',en:'Desserts / Drinks',ja:'スイーツ・ドリンク',ko:'디저트/음료',fr:'Desserts / Boissons'},
+        sub:{'zh-HK':'Desserts','zh-CN':'奈雪/一点点',en:'Sweet treats',ja:'Desserts',ko:'Desserts',fr:'Douceurs'},
+        dishes:[
+          {n:{'zh-HK':'珍珠奶茶','zh-CN':'一点点·波霸奶茶',en:'Bubble Tea',ja:'タピオカミルクティー',ko:'버블티',fr:'Bubble Tea'}},
+          {n:{'zh-HK':'楊枝甘露','zh-CN':'奈雪的茶·霸气芝士草莓',en:'Mango Sago',ja:'マンゴーサゴ',ko:'망고사고',fr:'Mangue-sagou'}},
+          {n:{'zh-HK':'雞蛋仔','zh-CN':'奈雪的茶·软欧包',en:'Egg Waffle',ja:'エッグワッフル',ko:'에그와플',fr:'Gaufre à bulles'}},
+          {n:{'zh-HK':'港式奶茶','zh-CN':'芋说·椰子冻',en:'HK Milk Tea',ja:'香港ミルクティー',ko:'홍콩밀크티',fr:'Thé au lait HK'}},
+          {n:{'zh-HK':'豆腐花','zh-CN':'鹿松·可颂面包',en:'Tofu Pudding',ja:'豆腐花',ko:'두부푸딩',fr:'Tofu soyeux'}},
+          {n:{'zh-HK':'水果茶','zh-CN':'一点点·四季春茶',en:'Fruit Tea',ja:'フルーツティー',ko:'과일차',fr:'Thé aux fruits'}}
+      ]}
+    ];
+
+    // =============================================
+    // ELEMENTS + CULTURALLY ADAPTED FORTUNES
+    // =============================================
+    const ELEMENTS = [
+      { id:'fire', emoji:'🔥',
+        name:{'zh-HK':'火','zh-CN':'火',en:'Fire',ja:'火',ko:'화(火)',fr:'Feu'},
+        categories:['thai','korean','indian'],
+        messages:{
+          'zh-HK':['今日五行缺火，需要辣嘢刺激味蕾！🌶️','火星逆行中，用一碗辣湯化解！🔥','火行人今日能量爆棚！食辣嘢釋放熱情！💥','命格帶火，辛辣食物幫你開運！🌟'],
+          'zh-CN':['今天五行缺火，去曙光路来顿川炉火锅！🌶️','黄龙人今天适合吃辣！东南亚菜或火锅走起！🔥','火行当旺，午饭来份南洋往事的叻沙！💥','西湖边的风吹不走你的火气，不如吃辣发泄！🌟'],
+          en:['The stars say you need fire today — go spicy! 🌶️','Mercury in retrograde? A fiery meal will fix everything! 🔥','Your fire energy is off the charts — match it with bold flavors! 💥','Today\'s horoscope: spice is your lucky charm! 🌟'],
+          ja:['大吉🎋 今日の昼食運は辛い物が吉！スパイシーで開運！','御神籤曰く：火の気が不足！激辛料理で運気アップ！🔥','今日のおみくじ：辛口料理で午後の仕事運UP！💥','火の五行パワー全開！辛い物でエネルギーチャージ！🌟'],
+          ko:['오늘의 사주: 화(火)의 기운이 필요합니다! 매운 음식으로 운을 올리세요! 🌶️','사주풀이: 화기가 부족한 날! 매운탕으로 보충하세요! 🔥','오늘의 점괘: 매운 음식이 행운을 부릅니다! 💥','화(火)의 기운 충만! 불맛으로 오후를 이겨내세요! 🌟'],
+          fr:['Votre horoscope culinaire : l\'élément Feu domine — optez pour des saveurs épicées ! 🌶️','Les astres recommandent un déjeuner flamboyant et épicé ! 🔥','Énergie de Feu maximale — libérez-la avec un curry bien relevé ! 💥','Aujourd\'hui, le piment est votre porte-bonheur ! 🌟']
+        }
+      },
+      { id:'water', emoji:'💧',
+        name:{'zh-HK':'水','zh-CN':'水',en:'Water',ja:'水',ko:'수(水)',fr:'Eau'},
+        categories:['vietnamese','congee-noodles','japanese'],
+        messages:{
+          'zh-HK':['水行當旺，飲湯食粉最啱！🍜','今日適合食滋潤嘢，湯湯水水補返！💧','水氣充盈，一碗拉麵或河粉最配！🌊','命帶水運，滋潤嘅嘢食幫你順風順水！🐟'],
+          'zh-CN':['水行当旺，去苏面坊来碗秃黄油面！🍜','今天适合吃汤面，慧娟面馆的片儿川安排上！💧','水气充盈，和一料理的拉面或相缘的牛腩面都不错！🌊','西湖水润万物，今天喝汤吃面最养生！🐟'],
+          en:['The stars align for soup today — warm and nourishing! 🍜','Your Water energy flows strong — go for noodles or broth! 💧','Today\'s cosmic vibe: comfort in a bowl of ramen or pho! 🌊','A soupy lunch will carry you through the afternoon! 🐟'],
+          ja:['大吉🎋 水の気が満ちています！温かい麺類が吉！🍜','御神籤曰く：スープ系料理で運気上昇！💧','今日のおみくじ：ラーメンやフォーで心も体も潤す日！🌊','水の五行パワー発動！汁物で午後の運気アップ！🐟'],
+          ko:['오늘의 사주: 수(水)의 기운이 가득! 국물 요리가 딱! 🍜','사주풀이: 물기운 보충 필요! 뜨끈한 국수로 채우세요! 💧','오늘의 점괘: 라멘이나 쌀국수가 행운의 음식! 🌊','수(水) 기운과 함께! 따뜻한 국물로 오후를 달래세요! 🐟'],
+          fr:['Les astres recommandent un bon bouillon aujourd\'hui ! 🍜','Votre énergie d\'Eau est puissante — optez pour des nouilles ! 💧','Vibration cosmique du jour : réconfort dans un bol de ramen ! 🌊','Un déjeuner en soupe vous portera tout l\'après-midi ! 🐟']
+        }
+      },
+      { id:'wood', emoji:'🌿',
+        name:{'zh-HK':'木','zh-CN':'木',en:'Wood',ja:'木',ko:'목(木)',fr:'Bois'},
+        categories:['salad-healthy','vietnamese'],
+        messages:{
+          'zh-HK':['木行需要生機！食啲綠色蔬菜充電！🥗','今日木氣不足，沙律或越南嘢幫到你！🌱','木行人需要大自然嘅力量！食清淡嘢充電！🌳','春意盎然嘅一日！清新食物帶畀你好運！🍃'],
+          'zh-CN':['木行需要生机！来份轻食简餐充充电！🥗','黄龙人今天适合吃清淡的，沙拉走起！🌱','植物园就在旁边，今天跟着木行吃绿色！🌳','春风拂过曙光路，清新轻食带来好运！🍃'],
+          en:['Your Wood energy craves greenery — salad day! 🥗','The planets say: fresh and light is the way to go! 🌱','Channel nature\'s power with a vibrant, healthy lunch! 🌳','A fresh start on your plate brings fresh luck today! 🍃'],
+          ja:['大吉🎋 木の気が不足！グリーンサラダで開運！🥗','御神籤曰く：新鮮な野菜でエネルギーチャージ！🌱','今日のおみくじ：ヘルシーランチで午後の運気UP！🌳','木の五行パワー！フレッシュな食事で新しい風を！🍃'],
+          ko:['오늘의 사주: 목(木)의 기운 필요! 신선한 샐러드가 답! 🥗','사주풀이: 푸른 기운 보충! 건강식으로 에너지 충전! 🌱','오늘의 점괘: 가벼운 식사가 행운을 부릅니다! 🌳','목(木) 기운과 함께! 신선한 음식으로 리프레시! 🍃'],
+          fr:['L\'énergie du Bois demande de la verdure — salade en vue ! 🥗','Les planètes disent : frais et léger, c\'est la voie ! 🌱','Canalisez la nature avec un déjeuner frais et vitaminé ! 🌳','Un repas frais apporte une chance fraîche aujourd\'hui ! 🍃']
+        }
+      },
+      { id:'metal', emoji:'⚡',
+        name:{'zh-HK':'金','zh-CN':'金',en:'Metal',ja:'金',ko:'금(金)',fr:'Métal'},
+        categories:['fast-food','western','korean'],
+        messages:{
+          'zh-HK':['金行氣場強！食脆口嘢增強運勢！🍗','今日金運旺，炸雞薯條係幸運食物！⚡','金光閃閃嘅一日！食啲香脆嘢慶祝！✨','金行主決斷！食完脆嘢做嘢特別有效率！💪'],
+          'zh-CN':['金行气场强！下楼去麦当劳来个巨无霸！🍗','今天金运旺，WADE\'S的汉堡或炸鸡是幸运食物！⚡','金光闪闪的一天！黄龙海鲜大排档犒劳自己！✨','金行主决断！快餐解决午饭，下午高效冲！💪'],
+          en:['Your Metal energy is golden — treat yourself to something crispy! 🍗','The stars favor bold, crunchy flavors today! ⚡','A golden day calls for golden fries and crispy bites! ✨','Metal energy boosts productivity — fuel up with hearty comfort food! 💪'],
+          ja:['大吉🎋 金の気が充実！サクサク料理で開運！🍗','御神籤曰く：揚げ物で金運アップ！⚡','今日のおみくじ：カリカリ食感が幸運を呼ぶ！✨','金の五行パワー！ガッツリ食べて午後も頑張ろう！💪'],
+          ko:['오늘의 사주: 금(金)의 기운 충만! 바삭한 음식이 행운! 🍗','사주풀이: 금 기운 상승! 치킨으로 운을 높이세요! ⚡','오늘의 점괘: 바삭바삭한 음식이 행운의 열쇠! ✨','금(金) 기운 폭발! 든든하게 먹고 오후도 화이팅! 💪'],
+          fr:['Votre énergie Métal est dorée — offrez-vous du croustillant ! 🍗','Les astres favorisent les saveurs croquantes aujourd\'hui ! ⚡','Journée dorée : frites et poulet croustillant au menu ! ✨','L\'énergie Métal booste la productivité — un bon burger s\'impose ! 💪']
+        }
+      },
+      { id:'earth', emoji:'🌍',
+        name:{'zh-HK':'土','zh-CN':'土',en:'Earth',ja:'土',ko:'토(土)',fr:'Terre'},
+        categories:['chinese','taiwanese','congee-noodles'],
+        messages:{
+          'zh-HK':['土行穩陣！一碗白飯配餸最實際！🍚','今日需要紮實嘅能量，食飽飽打好基礎！💪','土行人要接地氣！傳統中式飯餸最啱！🏮','穩如泰山嘅一日！comfort food穩定軍心！🍲'],
+          'zh-CN':['土行稳当！去K-Lab的外婆家来碗茶香鸡！🍚','今天需要扎实能量，煮饭佬的煲仔饭安排上！💪','土行人要接地气！新丰小笼或知味观猫耳朵最配！🏮','稳如黄龙山！来份绿茶烤鸡定定心！🍲'],
+          en:['Earth energy grounds you — go classic with rice and sides! 🍚','You need solid fuel today — hearty and filling is the way! 💪','Stay grounded with traditional comfort food! 🏮','A stable day calls for a stable, satisfying meal! 🍲'],
+          ja:['大吉🎋 土の気でしっかり！ご飯物が吉！🍚','御神籤曰く：がっつり定食で地に足つけて！💪','今日のおみくじ：伝統料理でパワーチャージ！🏮','土の五行パワー！安定のご飯で午後も安泰！🍲'],
+          ko:['오늘의 사주: 토(土)의 기운! 든든한 밥이 최고! 🍚','사주풀이: 토 기운 보충! 푸짐한 한 끼로 기반을 다지세요! 💪','오늘의 점괘: 전통 음식이 행운을 가져옵니다! 🏮','토(土) 기운으로 안정! 편안한 한 끼가 오후를 지켜줍니다! 🍲'],
+          fr:['L\'énergie Terre vous ancre — classique avec riz et accompagnements ! 🍚','Vous avez besoin d\'énergie solide — copieux et nourrissant ! 💪','Restez ancré avec un bon plat traditionnel ! 🏮','Journée stable = repas satisfaisant et réconfortant ! 🍲']
+        }
+      }
+    ];
+
+    const LUCKY_COLORS = [
+      {n:{'zh-HK':'紅色','zh-CN':'红色',en:'Red',ja:'赤',ko:'빨강',fr:'Rouge'}, emoji:'🔴'},
+      {n:{'zh-HK':'金色','zh-CN':'金色',en:'Gold',ja:'金',ko:'금색',fr:'Or'}, emoji:'🟡'},
+      {n:{'zh-HK':'綠色','zh-CN':'绿色',en:'Green',ja:'緑',ko:'초록',fr:'Vert'}, emoji:'🟢'},
+      {n:{'zh-HK':'藍色','zh-CN':'蓝色',en:'Blue',ja:'青',ko:'파랑',fr:'Bleu'}, emoji:'🔵'},
+      {n:{'zh-HK':'紫色','zh-CN':'紫色',en:'Purple',ja:'紫',ko:'보라',fr:'Violet'}, emoji:'🟣'},
+      {n:{'zh-HK':'橙色','zh-CN':'橙色',en:'Orange',ja:'橙',ko:'주황',fr:'Orange'}, emoji:'🟠'}
+    ];
+
+    const SPIN_MESSAGES = {
+      'zh-HK':['問天問地問午餐... 🔮','五行推算中... ☯️','今日命格分析... 🌟','天機不可泄漏... 🤫','午餐塔羅牌翻緊... 🎴','神諭降臨中... ✨','算命師傅研究緊... 🔍','星象排列中... 🌙'],
+      'zh-CN':['问天问地问午餐... 🔮','五行推算中... ☯️','今日命格分析... 🌟','天机不可泄露... 🤫','午餐塔罗牌翻转中... 🎴','神谕降临中... ✨','算命师傅研究中... 🔍','星象排列中... 🌙'],
+      en:['Consulting the cosmos... 🔮','Aligning the stars... ☯️','Reading your food horoscope... 🌟','The universe is deciding... 🤫','Flipping your lunch tarot... 🎴','The oracle speaks... ✨','Channeling foodie energy... 🔍','Planets aligning... 🌙'],
+      ja:['おみくじを振っています... 🔮','五行を計算中... ☯️','今日の運勢を分析中... 🌟','天の声を聞いています... 🤫','ランチおみくじ抽選中... 🎴','神託降臨中... ✨','占い師が鑑定中... 🔍','星の配置を読み中... 🌙'],
+      ko:['점괘를 뽑는 중... 🔮','오행을 계산하는 중... ☯️','오늘의 운세 분석 중... 🌟','천기누설 불가... 🤫','점심 타로카드 뒤집는 중... 🎴','신탁이 내려오는 중... ✨','사주를 분석하는 중... 🔍','별자리 정렬 중... 🌙'],
+      fr:['Consultation des astres... 🔮','Alignement des éléments... ☯️','Lecture de votre horoscope... 🌟','L\'univers délibère... 🤫','Les cartes se révèlent... 🎴','L\'oracle se prononce... ✨','Canalisation d\'énergie... 🔍','Les planètes s\'alignent... 🌙']
+    };
+
+    // =============================================
+    // HELPERS
+    // =============================================
+    function catName(cat) { return cat.name[currentLang] || cat.name.en; }
+    function catSub(cat) { return cat.sub[currentLang] || cat.sub.en; }
+    function dishName(dish) { return dish.n[currentLang] || dish.n.en; }
+    function dishSub(dish) {
+      // Show English as subtitle for CJK, show zh-HK for English/French
+      if (['zh-HK','zh-CN','ja','ko'].includes(currentLang)) return dish.n.en;
+      return dish.n['zh-HK'];
+    }
+    function elemName(el) { return el.name[currentLang] || el.name.en; }
+    function colorName(c) { return c.n[currentLang] || c.n.en; }
+    function getSpinMsgs() { return SPIN_MESSAGES[currentLang] || SPIN_MESSAGES.en; }
+
+    function getDailySeed(date) {
+      const d = date || new Date();
+      const dateStr = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      let hash = 0;
+      for (let i = 0; i < dateStr.length; i++) hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+      return Math.abs(hash);
+    }
+
+    function getDailyFortune() {
+      const now = new Date();
+      const seed = getDailySeed(now);
+      const day = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+      const element = ELEMENTS[seed % 5];
+      const msgs = element.messages[currentLang] || element.messages.en;
+      const message = msgs[(seed * day) % msgs.length];
+      const luckyColor = LUCKY_COLORS[(seed * 3 + day) % LUCKY_COLORS.length];
+      const fortuneScore = (seed % 4) + 2;
+      return { element, message, luckyColor, fortuneScore };
+    }
+
+    // =============================================
+    // STATE + DOM
+    // =============================================
+    let selectedCategory = null;
+    let currentResult = null;
+    const $ = id => document.getElementById(id);
+    const screens = () => [$('screen-home'), $('screen-divine'), $('screen-result'), $('screen-dishes')];
+
+    function showScreen(target) {
+      screens().forEach(s => s.classList.remove('active'));
+      target.classList.add('active');
+      target.scrollTop = 0;
+    }
+
+    function showToast(text) {
+      const el = $('toast');
+      el.textContent = text;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2000);
+    }
+
+    function starsHTML(score) {
+      return Array.from({length:5}, (_,i) => i < score ? '<span class="star-filled">★</span>' : '<span class="star-empty">★</span>').join('');
+    }
+
+    // =============================================
+    // RENDER
+    // =============================================
+    function renderLangBar() {
+      $('lang-bar').innerHTML = LANGUAGES.map(l =>
+        `<button class="lang-btn${l.code === currentLang ? ' active' : ''}" data-lang="${l.code}">${l.flag} ${l.label}</button>`
+      ).join('');
+    }
+
+    function renderHome() {
+      const f = getDailyFortune();
+      $('home-title').textContent = t('title');
+      $('home-subtitle').textContent = t('subtitle');
+      $('btn-draw').textContent = t('drawBtn');
+      $('btn-pick-yourself').textContent = t('pickYourself');
+      $('section-divider').textContent = t('sectionDivider');
+      $('btn-accept').textContent = t('btnAccept');
+      $('btn-redraw').textContent = t('btnRedraw');
+      $('btn-share').textContent = t('btnShare');
+      $('btn-browse').textContent = t('btnBrowse');
+      $('btn-back-home').textContent = t('btnBack');
+      $('dish-divider-text').textContent = t('dishDivider');
+
+      $('fortune-banner').innerHTML = `
+        <div class="element-row">
+          <span class="element-emoji">${f.element.emoji}</span>
+          <span class="element-name">${t('todayElement')}${elemName(f.element)}</span>
+        </div>
+        <div class="fortune-text">${f.message}</div>
+        <div class="fortune-stars">${starsHTML(f.fortuneScore)}</div>
+        <div class="fortune-label">${t('lunchFortune')}</div>`;
+
+      $('category-grid').innerHTML = FOOD_DATA.map(cat => `
+        <div class="category-card" data-id="${cat.id}">
+          <span class="emoji">${cat.emoji}</span>
+          <span class="cat-name">${catName(cat)}</span>
+          <span class="cat-sub">${catSub(cat)}</span>
+        </div>`).join('');
+    }
+
+    function renderResult() {
+      if (!currentResult) return;
+      const { category, dish, fortune } = currentResult;
+      const el = fortune.element;
+      const lc = fortune.luckyColor;
+      $('tarot-card').innerHTML = `
+        <div class="card-label">${t('oracleLabel')}</div>
+        <div class="card-emoji">${category.emoji}</div>
+        <div class="card-dish-primary">${dishName(dish)}</div>
+        <div class="card-dish-secondary">${dishSub(dish)}</div>
+        <div class="card-category">${catName(category)}</div>
+        <div class="divination-copy">${fortune.message}</div>
+        <div class="element-badge">${el.emoji} ${elemName(el)}${t('elementSuffix')} · ${lc.emoji} ${t('luckyColor')}${colorName(lc)}</div>
+        <div class="fortune-score">${t('lunchFortune')} ${starsHTML(fortune.fortuneScore)}</div>`;
+      const card = $('tarot-card');
+      card.style.animation = 'none';
+      card.offsetHeight;
+      card.style.animation = '';
+    }
+
+    function renderDishes(cat) {
+      $('dish-header-title').textContent = cat.emoji + ' ' + catName(cat);
+      $('btn-just-category').textContent = t('justCategory').replace('{name}', catName(cat));
+      $('dish-list').innerHTML = cat.dishes.map((d, i) => `
+        <div class="dish-card" data-index="${i}">
+          <div class="dish-names">
+            <div class="dish-primary">${dishName(d)}</div>
+            <div class="dish-secondary">${dishSub(d)}</div>
+          </div>
+          <span class="dish-arrow">›</span>
+        </div>`).join('');
+    }
+
+    // =============================================
+    // DIVINATION ANIMATION
+    // =============================================
+    function runDivination() {
+      showScreen($('screen-divine'));
+      const $emoji = $('slot-emoji');
+      const $msg = $('divine-message');
+      const $sub = $('divine-sub');
+      const msgs = getSpinMsgs();
+
+      $emoji.className = 'slot-emoji spinning';
+      $msg.textContent = msgs[0];
+      $sub.textContent = '';
+
+      const allEmojis = FOOD_DATA.map(c => c.emoji);
+      let cycle = 0, msgIdx = 0;
+      const total = 18, baseDelay = 70, maxDelay = 350;
+
+      const msgInterval = setInterval(() => {
+        msgIdx = (msgIdx + 1) % msgs.length;
+        $msg.textContent = msgs[msgIdx];
+      }, 600);
+
+      function tick() {
+        $emoji.textContent = allEmojis[cycle % allEmojis.length];
+        cycle++;
+        if (cycle >= total) {
+          clearInterval(msgInterval);
+          $emoji.className = 'slot-emoji';
+          const fortune = getDailyFortune();
+          const biased = fortune.element.categories;
+          const pool = Math.random() < 0.7 ? FOOD_DATA.filter(c => biased.includes(c.id)) : FOOD_DATA;
+          const cat = (pool.length ? pool : FOOD_DATA)[Math.floor(Math.random() * (pool.length || FOOD_DATA.length))];
+          const dish = cat.dishes[Math.floor(Math.random() * cat.dishes.length)];
+          currentResult = { category: cat, dish, fortune };
+          $emoji.textContent = cat.emoji;
+          $msg.textContent = t('fortuneRevealed');
+          $sub.textContent = '✨';
+          setTimeout(() => { renderResult(); showScreen($('screen-result')); }, 800);
+          return;
+        }
+        const progress = cycle / total;
+        setTimeout(tick, baseDelay + (maxDelay - baseDelay) * Math.pow(progress, 2.5));
+      }
+      setTimeout(tick, 300);
+    }
+
+    // =============================================
+    // SHARE
+    // =============================================
+    function shareResult() {
+      if (!currentResult) return;
+      const { category, dish, fortune } = currentResult;
+      let text = '🔮 ' + t('oracleLabel') + '\n\n';
+      text += category.emoji + ' ' + dishName(dish) + ' / ' + dishSub(dish) + '\n';
+      text += '(' + catName(category) + ')\n\n';
+      text += fortune.element.emoji + ' ' + fortune.message + '\n\n';
+      text += t('lunchFortune') + ' ' + '★'.repeat(fortune.fortuneScore) + '☆'.repeat(5 - fortune.fortuneScore) + '\n';
+      text += '— Times Square Lunch Oracle 🔮';
+      if (navigator.share) navigator.share({ text }).catch(() => copyText(text));
+      else copyText(text);
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => showToast(t('copied'))).catch(() => showToast('⚠️'));
+    }
+
+    // =============================================
+    // EVENTS
+    // =============================================
+    $('lang-bar').addEventListener('click', e => {
+      const btn = e.target.closest('.lang-btn');
+      if (!btn) return;
+      currentLang = btn.dataset.lang;
+      localStorage.setItem('lunchOracleLang', currentLang);
+      renderLangBar();
+      renderHome();
+    });
+
+    $('btn-draw').addEventListener('click', runDivination);
+    $('btn-pick-yourself').addEventListener('click', () => document.querySelector('.section-divider').scrollIntoView({ behavior: 'smooth' }));
+    $('category-grid').addEventListener('click', e => {
+      const card = e.target.closest('.category-card');
+      if (!card) return;
+      selectedCategory = FOOD_DATA.find(c => c.id === card.dataset.id);
+      renderDishes(selectedCategory);
+      showScreen($('screen-dishes'));
+    });
+    $('btn-back-home').addEventListener('click', () => showScreen($('screen-home')));
+    $('btn-just-category').addEventListener('click', () => {
+      const dish = selectedCategory.dishes[Math.floor(Math.random() * selectedCategory.dishes.length)];
+      const fortune = getDailyFortune();
+      currentResult = { category: selectedCategory, dish, fortune };
+      renderResult();
+      showScreen($('screen-result'));
+    });
+    $('dish-list').addEventListener('click', e => {
+      const card = e.target.closest('.dish-card');
+      if (!card) return;
+      const dish = selectedCategory.dishes[parseInt(card.dataset.index, 10)];
+      const fortune = getDailyFortune();
+      currentResult = { category: selectedCategory, dish, fortune };
+      renderResult();
+      showScreen($('screen-result'));
+    });
+    $('btn-accept').addEventListener('click', () => { showToast(t('enjoyMeal')); setTimeout(() => showScreen($('screen-home')), 1500); });
+    $('btn-redraw').addEventListener('click', runDivination);
+    $('btn-share').addEventListener('click', shareResult);
+    $('btn-browse').addEventListener('click', () => showScreen($('screen-home')));
+
+    // =============================================
+    // INIT
+    // =============================================
+    renderLangBar();
+    renderHome();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "午餐神諭 Lunch Oracle",
+  "short_name": "午餐神諭",
+  "description": "Daily random food divination for Times Square office workers",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0F0F0F",
+  "theme_color": "#FF6B35",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
