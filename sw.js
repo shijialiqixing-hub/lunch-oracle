@@ -1,4 +1,4 @@
-const CACHE_NAME = 'food-picker-v2';
+const CACHE_NAME = 'food-picker-v3';
 const urlsToCache = ['./index.html'];
 
 self.addEventListener('install', (event) => {

@@ -9,10 +9,10 @@
   <meta name="apple-mobile-web-app-title" content="Lunch Oracle" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>" />
   <link rel="manifest" href="manifest.json" />
-  <title>Lunch Oracle 午餐神諭</title>
+  <title>午餐神諭 Lunch Oracle</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #0F0F0F;
@@ -42,7 +42,7 @@
 
     html, body {
       height: 100%;
-      font-family: 'Outfit', 'Noto Sans TC', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', -apple-system, sans-serif;
+      font-family: 'Noto Sans TC', 'Noto Sans SC', -apple-system, sans-serif;
       background-color: var(--bg);
       color: var(--text-primary);
       -webkit-font-smoothing: antialiased;
@@ -67,35 +67,34 @@
     }
     .screen.active { position: relative; transform: translateX(0); opacity: 1; pointer-events: auto; }
 
-    /* === LANGUAGE SWITCHER === */
-    .lang-bar {
-      display: flex; justify-content: center; gap: 6px;
-      padding: 16px 16px 0; flex-wrap: wrap;
+    /* === LANGUAGE TOGGLE === */
+    .lang-toggle {
+      display: flex; justify-content: center; gap: 4px;
+      padding: 16px 16px 0;
     }
-    .lang-btn {
-      padding: 6px 10px; border-radius: 20px;
+    .lang-toggle .lang-btn {
+      padding: 8px 20px; border-radius: 20px;
       background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-muted); font-size: 13px;
+      color: var(--text-muted); font-size: 14px; font-weight: 500;
       cursor: pointer; touch-action: manipulation;
       font-family: inherit; transition: all 0.2s ease;
-      white-space: nowrap;
     }
-    .lang-btn.active {
+    .lang-toggle .lang-btn.active {
       background: var(--primary-dim); border-color: var(--primary);
-      color: var(--primary); font-weight: 600;
+      color: var(--primary); font-weight: 700;
     }
-    .lang-btn:active { transform: scale(0.95); }
+    .lang-toggle .lang-btn:active { transform: scale(0.95); }
 
     /* === HOME SCREEN === */
     .home-header { padding: 16px 20px 8px; text-align: center; }
-    .home-header h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
-    .home-header .subtitle { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+    .home-header h1 { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+    .home-header .subtitle { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
 
     .fortune-banner {
-      margin: 16px 16px 0;
+      margin: 12px 16px 0;
       background: linear-gradient(135deg, rgba(155, 109, 255, 0.12), rgba(255, 215, 0, 0.10));
       border: 1px solid rgba(155, 109, 255, 0.25);
-      border-radius: var(--radius-xl); padding: 18px;
+      border-radius: var(--radius-xl); padding: 16px;
       text-align: center; position: relative; overflow: hidden;
     }
     .fortune-banner::before {
@@ -103,16 +102,62 @@
       background: radial-gradient(circle at 50% 0%, rgba(155, 109, 255, 0.08), transparent 70%);
       pointer-events: none;
     }
-    .fortune-banner .element-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
-    .fortune-banner .element-emoji { font-size: 26px; }
-    .fortune-banner .element-name { font-size: 16px; font-weight: 700; color: var(--gold); }
+    .fortune-banner .element-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
+    .fortune-banner .element-emoji { font-size: 24px; }
+    .fortune-banner .element-name { font-size: 15px; font-weight: 700; color: var(--gold); }
     .fortune-banner .fortune-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-    .fortune-banner .fortune-stars { margin-top: 8px; font-size: 16px; letter-spacing: 2px; }
-    .fortune-banner .fortune-stars .star-filled { color: var(--gold); }
-    .fortune-banner .fortune-stars .star-empty { color: var(--border-light); }
+    .fortune-banner .fortune-stars { margin-top: 6px; font-size: 16px; letter-spacing: 2px; }
+    .fortune-banner .star-filled { color: var(--gold); }
+    .fortune-banner .star-empty { color: var(--border-light); }
     .fortune-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
-    .draw-section { padding: 20px 16px 12px; text-align: center; }
+    /* === PREFERENCE PANEL === */
+    .pref-panel {
+      margin: 12px 16px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .pref-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; cursor: pointer; touch-action: manipulation;
+    }
+    .pref-toggle-label { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+    .pref-toggle-arrow { font-size: 12px; color: var(--text-muted); transition: transform 0.3s ease; }
+    .pref-panel.expanded .pref-toggle-arrow { transform: rotate(180deg); }
+    .pref-toggle-summary { font-size: 11px; color: var(--text-muted); margin-left: 8px; }
+
+    .pref-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease;
+      padding: 0 16px;
+    }
+    .pref-panel.expanded .pref-body {
+      max-height: 600px;
+      padding: 0 16px 16px;
+    }
+
+    .pref-row { margin-bottom: 12px; }
+    .pref-row:last-child { margin-bottom: 0; }
+    .pref-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+    .pref-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pref-pill {
+      padding: 6px 12px; border-radius: 16px;
+      background: var(--surface-elevated); border: 1px solid var(--border);
+      color: var(--text-muted); font-size: 12px; font-weight: 500;
+      cursor: pointer; touch-action: manipulation;
+      font-family: inherit; transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .pref-pill.active {
+      background: var(--primary-dim); border-color: var(--primary);
+      color: var(--primary); font-weight: 600;
+    }
+    .pref-pill:active { transform: scale(0.95); }
+
+    /* === DRAW SECTION === */
+    .draw-section { padding: 16px 16px 8px; text-align: center; }
     .draw-btn {
       width: 100%; padding: 18px 24px;
       background: linear-gradient(135deg, var(--primary), #FF8F35);
@@ -129,32 +174,59 @@
       50% { box-shadow: 0 4px 40px rgba(255, 107, 53, 0.6); }
     }
     .pick-yourself-link {
-      display: block; margin-top: 14px; font-size: 13px; color: var(--text-muted);
+      display: block; margin-top: 12px; font-size: 13px; color: var(--text-muted);
       text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit;
     }
 
+    /* === HISTORY SECTION === */
+    .history-section { margin: 8px 16px 0; }
+    .history-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .history-clear { font-size: 11px; color: var(--text-muted); cursor: pointer; background: none; border: none; font-family: inherit; }
+    .history-list { display: flex; flex-direction: column; gap: 6px; }
+    .history-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      font-size: 13px;
+    }
+    .history-item .h-emoji { font-size: 20px; flex-shrink: 0; }
+    .history-item .h-info { flex: 1; }
+    .history-item .h-name { font-weight: 600; font-size: 13px; }
+    .history-item .h-date { font-size: 11px; color: var(--text-muted); }
+    .history-item .h-exclude {
+      padding: 4px 8px; border-radius: 12px; font-size: 11px;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-muted); cursor: pointer; font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .history-item .h-exclude.excluded {
+      background: rgba(255, 59, 48, 0.15); border-color: rgba(255, 59, 48, 0.4);
+      color: #FF3B30;
+    }
+
+    /* === SECTION DIVIDER === */
     .section-divider {
       display: flex; align-items: center; gap: 12px;
-      padding: 8px 20px 12px; color: var(--text-muted); font-size: 12px;
-      text-transform: uppercase; letter-spacing: 1px;
+      padding: 12px 20px; color: var(--text-muted); font-size: 12px;
+      letter-spacing: 1px;
     }
     .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 16px 32px; }
+    /* === CATEGORY GRID === */
+    .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 0 16px 32px; }
     .category-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 14px 6px;
+      border-radius: var(--radius-lg); padding: 12px 4px;
       text-align: center; cursor: pointer;
       transition: transform 0.1s ease, background 0.2s ease;
-      touch-action: manipulation; min-height: 90px;
+      touch-action: manipulation; min-height: 72px;
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
     }
     .category-card:active { transform: scale(0.95); background: var(--surface-elevated); }
-    .category-card .emoji { font-size: 32px; line-height: 1; }
-    .category-card .cat-name { font-size: 13px; font-weight: 600; }
-    .category-card .cat-sub { font-size: 10px; color: var(--text-muted); }
+    .category-card .emoji { font-size: 26px; line-height: 1; }
+    .category-card .cat-name { font-size: 11px; font-weight: 600; }
 
-    /* === DIVINATION === */
+    /* === DIVINATION SCREEN === */
     .divine-screen { background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .divine-circle {
       width: 200px; height: 200px; border-radius: 50%;
@@ -176,7 +248,7 @@
     .divine-message { margin-top: 28px; font-size: 16px; font-weight: 600; color: var(--purple); text-align: center; min-height: 24px; }
     .divine-sub { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
 
-    /* === RESULT === */
+    /* === RESULT SCREEN === */
     .result-content { padding: 0 16px; }
     .tarot-card {
       background: linear-gradient(160deg, #1E1E2E, #1A1A2A);
@@ -184,7 +256,6 @@
       border-radius: var(--radius-2xl); padding: 24px 18px;
       margin: 16px 0; text-align: center;
       position: relative; overflow: hidden;
-      transform-style: preserve-3d;
       animation: cardReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     @keyframes cardReveal {
@@ -196,66 +267,94 @@
       background: radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.06), transparent 60%);
       pointer-events: none;
     }
-    .tarot-card .card-label { font-size: 11px; color: var(--purple); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; font-weight: 600; }
-    .tarot-card .card-emoji { font-size: 60px; margin-bottom: 10px; }
-    .tarot-card .card-dish-primary { font-size: 24px; font-weight: 900; }
-    .tarot-card .card-dish-secondary { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
-    .tarot-card .card-category { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-    .divination-copy { margin-top: 18px; padding: 14px 16px; background: var(--purple-dim); border-radius: var(--radius-md); font-size: 14px; line-height: 1.6; color: #C9B8FF; }
-    .element-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 6px 14px; background: var(--gold-dim); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 20px; font-size: 12px; color: var(--gold); font-weight: 600; }
-    .fortune-score { margin-top: 10px; font-size: 14px; color: var(--text-muted); }
+    .card-label { font-size: 11px; color: var(--purple); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-weight: 600; }
+    .card-emoji { font-size: 56px; margin-bottom: 8px; }
+    .card-restaurant-name { font-size: 24px; font-weight: 900; }
+    .card-meta { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; font-size: 13px; color: var(--text-secondary); }
+    .card-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .card-dishes { margin-top: 16px; text-align: left; }
+    .card-dishes .dishes-title { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .card-dish-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; background: rgba(255,255,255,0.04);
+      border-radius: var(--radius-md); margin-bottom: 6px;
+    }
+    .card-dish-item .dish-star { color: var(--gold); font-size: 14px; }
+    .card-dish-item .dish-name { font-size: 14px; font-weight: 600; }
+    .card-dish-item .dish-note { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+
+    .divination-copy {
+      margin-top: 16px; padding: 12px 14px;
+      background: var(--purple-dim); border-radius: var(--radius-md);
+      font-size: 13px; line-height: 1.6; color: #C9B8FF;
+    }
+    .match-copy {
+      margin-top: 8px; font-size: 12px; color: var(--text-muted); text-align: center;
+    }
+    .element-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 12px; padding: 6px 14px;
+      background: var(--gold-dim); border: 1px solid rgba(255, 215, 0, 0.25);
+      border-radius: 20px; font-size: 12px; color: var(--gold); font-weight: 600;
+    }
+    .fortune-score { margin-top: 8px; font-size: 14px; color: var(--text-muted); }
     .fortune-score .star-filled { color: var(--gold); font-size: 18px; }
     .fortune-score .star-empty { color: var(--border-light); font-size: 18px; }
 
-    .result-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; }
+    /* === PLATFORM BUTTONS === */
+    .platform-row {
+      display: flex; gap: 8px; margin-top: 16px; justify-content: center;
+    }
+    .platform-btn {
+      flex: 1; padding: 10px 8px; border-radius: var(--radius-md);
+      font-size: 12px; font-weight: 600; text-align: center;
+      cursor: pointer; touch-action: manipulation;
+      text-decoration: none; display: flex; align-items: center;
+      justify-content: center; gap: 4px;
+      transition: all 0.2s ease; font-family: inherit; border: none;
+    }
+    .platform-btn:active { transform: scale(0.95); }
+    .platform-btn.openrice { background: rgba(255, 107, 53, 0.15); color: var(--primary); border: 1px solid rgba(255, 107, 53, 0.3); }
+    .platform-btn.keeta { background: rgba(0, 217, 165, 0.15); color: var(--secondary); border: 1px solid rgba(0, 217, 165, 0.3); }
+    .platform-btn.gmaps { background: rgba(66, 133, 244, 0.15); color: #4285F4; border: 1px solid rgba(66, 133, 244, 0.3); }
+    .platform-btn.dianping { background: rgba(255, 107, 53, 0.15); color: var(--primary); border: 1px solid rgba(255, 107, 53, 0.3); }
+    .platform-btn.meituan { background: rgba(255, 215, 0, 0.15); color: var(--gold); border: 1px solid rgba(255, 215, 0, 0.3); }
+    .platform-btn.gaode { background: rgba(66, 133, 244, 0.15); color: #4285F4; border: 1px solid rgba(66, 133, 244, 0.3); }
+
+    /* === RESULT ACTIONS === */
+    .result-actions { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; }
     .btn-accept { width: 100%; padding: 16px; background: var(--secondary); border: none; border-radius: var(--radius-lg); color: #000; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; touch-action: manipulation; transition: transform 0.1s ease; }
     .btn-accept:active { transform: scale(0.98); }
     .btn-redraw { width: 100%; padding: 14px; background: var(--primary-dim); border: 1px solid var(--primary); border-radius: var(--radius-lg); color: var(--primary); font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; touch-action: manipulation; transition: transform 0.1s ease; }
     .btn-redraw:active { transform: scale(0.98); }
     .btn-row { display: flex; gap: 10px; }
-    .btn-share { flex: 1; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-secondary); font-size: 14px; font-family: inherit; cursor: pointer; touch-action: manipulation; transition: background 0.2s ease; }
-    .btn-share:active { background: var(--surface-elevated); }
+    .btn-share { flex: 1; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-secondary); font-size: 14px; font-family: inherit; cursor: pointer; touch-action: manipulation; }
     .btn-browse { flex: 1; padding: 14px; background: transparent; border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-muted); font-size: 14px; font-family: inherit; cursor: pointer; touch-action: manipulation; }
 
-    /* === DISH SCREEN === */
+    /* === BROWSE SCREEN === */
     .screen-header { display: flex; align-items: center; gap: 12px; padding: 20px 16px 12px; position: sticky; top: 0; background: var(--bg); z-index: 10; border-bottom: 1px solid var(--border); }
-    .back-btn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 14px; padding: 8px 12px; cursor: pointer; touch-action: manipulation; font-family: inherit; transition: background 0.2s ease; }
-    .back-btn:active { background: var(--surface-elevated); }
+    .back-btn { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 14px; padding: 8px 12px; cursor: pointer; touch-action: manipulation; font-family: inherit; }
     .screen-header h2 { font-size: 20px; font-weight: 600; flex: 1; }
-    .just-category-btn { display: block; width: calc(100% - 32px); margin: 16px auto 8px; padding: 14px 16px; background: var(--primary-dim); border: 1px solid var(--primary); border-radius: var(--radius-md); color: var(--primary); font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer; touch-action: manipulation; text-align: center; transition: transform 0.1s ease; }
-    .just-category-btn:active { transform: scale(0.98); }
-    .dish-divider { padding: 12px 20px 8px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .dish-list { padding: 0 16px 32px; }
-    .dish-card { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 8px; cursor: pointer; touch-action: manipulation; transition: transform 0.1s ease, background 0.2s ease; }
-    .dish-card:active { transform: scale(0.98); background: var(--surface-elevated); }
-    .dish-card .dish-names { flex: 1; }
-    .dish-card .dish-primary { font-size: 16px; font-weight: 600; }
-    .dish-card .dish-secondary { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-    .dish-card .dish-arrow { color: var(--text-muted); font-size: 18px; }
 
-    /* External link pill on dish cards */
-    .dish-external-link {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 6px 10px; border-radius: 20px;
-      background: var(--primary-dim); color: var(--primary);
-      font-size: 11px; font-weight: 600;
-      text-decoration: none; white-space: nowrap;
-      transition: all 0.2s ease; flex-shrink: 0;
-      touch-action: manipulation;
+    .browse-category-title {
+      padding: 14px 20px 8px; font-size: 13px; font-weight: 700;
+      color: var(--text-secondary); display: flex; align-items: center; gap: 8px;
     }
-    .dish-external-link:active { background: var(--primary); color: #fff; transform: scale(0.95); }
-
-    /* Find Restaurant button on result screen */
-    .btn-find-restaurant {
-      width: 100%; padding: 14px;
-      border-radius: var(--radius-lg);
-      background: var(--primary-dim); border: 1px solid var(--primary);
-      color: var(--primary); font-size: 15px; font-weight: 600;
-      cursor: pointer; font-family: inherit;
-      touch-action: manipulation;
-      transition: all 0.2s ease; margin-top: 0;
+    .restaurant-list { padding: 0 16px 8px; }
+    .restaurant-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      margin-bottom: 8px; cursor: pointer; touch-action: manipulation;
+      transition: transform 0.1s ease, background 0.2s ease;
     }
-    .btn-find-restaurant:active { background: var(--primary); color: #fff; transform: scale(0.97); }
+    .restaurant-card:active { transform: scale(0.98); background: var(--surface-elevated); }
+    .restaurant-card .r-emoji { font-size: 28px; flex-shrink: 0; }
+    .restaurant-card .r-info { flex: 1; }
+    .restaurant-card .r-name { font-size: 15px; font-weight: 600; }
+    .restaurant-card .r-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .restaurant-card .r-arrow { color: var(--text-muted); font-size: 16px; }
 
     .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface-elevated); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 12px 24px; font-size: 14px; color: var(--secondary); font-weight: 600; opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; z-index: 100; pointer-events: none; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -268,21 +367,76 @@
 </head>
 <body>
   <div id="app">
+    <!-- HOME SCREEN -->
     <section id="screen-home" class="screen active">
-      <div id="lang-bar" class="lang-bar"></div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="zh-HK">🇭🇰 繁中</button>
+        <button class="lang-btn" data-lang="zh-CN">🇨🇳 简中</button>
+      </div>
+
       <header class="home-header">
         <h1 id="home-title"></h1>
         <div id="home-subtitle" class="subtitle"></div>
       </header>
+
       <div id="fortune-banner" class="fortune-banner"></div>
+
+      <!-- Preference Panel -->
+      <div id="pref-panel" class="pref-panel">
+        <div id="pref-toggle" class="pref-toggle">
+          <span class="pref-toggle-label" id="pref-toggle-label"></span>
+          <span>
+            <span id="pref-summary" class="pref-toggle-summary"></span>
+            <span class="pref-toggle-arrow">▼</span>
+          </span>
+        </div>
+        <div class="pref-body">
+          <div class="pref-row">
+            <div class="pref-label" id="pref-label-diners"></div>
+            <div class="pref-pills" id="pills-diners"></div>
+          </div>
+          <div class="pref-row">
+            <div class="pref-label" id="pref-label-flavor"></div>
+            <div class="pref-pills" id="pills-flavor"></div>
+          </div>
+          <div class="pref-row">
+            <div class="pref-label" id="pref-label-budget"></div>
+            <div class="pref-pills" id="pills-budget"></div>
+          </div>
+          <div class="pref-row">
+            <div class="pref-label" id="pref-label-time"></div>
+            <div class="pref-pills" id="pills-time"></div>
+          </div>
+          <div class="pref-row">
+            <div class="pref-label" id="pref-label-dietary"></div>
+            <div class="pref-pills" id="pills-dietary"></div>
+          </div>
+          <div class="pref-row">
+            <div class="pref-label" id="pref-label-scene"></div>
+            <div class="pref-pills" id="pills-scene"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="draw-section">
         <button id="btn-draw" class="draw-btn"></button>
         <button id="btn-pick-yourself" class="pick-yourself-link"></button>
       </div>
+
+      <!-- Recent History -->
+      <div id="history-section" class="history-section" style="display:none;">
+        <div class="history-label">
+          <span id="history-label-text"></span>
+          <button id="history-clear" class="history-clear"></button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </div>
+
       <div id="section-divider" class="section-divider"></div>
       <div id="category-grid" class="category-grid"></div>
     </section>
 
+    <!-- DIVINATION SCREEN -->
     <section id="screen-divine" class="screen divine-screen">
       <div class="divine-circle">
         <div id="slot-emoji" class="slot-emoji">🔮</div>
@@ -291,13 +445,14 @@
       <div id="divine-sub" class="divine-sub"></div>
     </section>
 
+    <!-- RESULT SCREEN -->
     <section id="screen-result" class="screen">
       <div class="result-content">
         <div id="tarot-card" class="tarot-card"></div>
+        <div id="platform-row" class="platform-row"></div>
         <div class="result-actions">
           <button id="btn-accept" class="btn-accept"></button>
           <button id="btn-redraw" class="btn-redraw"></button>
-          <button id="btn-find-restaurant" class="btn-find-restaurant"></button>
           <div class="btn-row">
             <button id="btn-share" class="btn-share"></button>
             <button id="btn-browse" class="btn-browse"></button>
@@ -306,14 +461,13 @@
       </div>
     </section>
 
-    <section id="screen-dishes" class="screen">
+    <!-- BROWSE SCREEN -->
+    <section id="screen-browse" class="screen">
       <div class="screen-header">
         <button id="btn-back-home" class="back-btn"></button>
-        <h2 id="dish-header-title"></h2>
+        <h2 id="browse-title"></h2>
       </div>
-      <button id="btn-just-category" class="just-category-btn"></button>
-      <div id="dish-divider-text" class="dish-divider"></div>
-      <div id="dish-list" class="dish-list"></div>
+      <div id="browse-list"></div>
     </section>
   </div>
   <div id="toast" class="toast"></div>
@@ -322,303 +476,568 @@
     // =============================================
     // LANGUAGE SYSTEM
     // =============================================
-    const LANGUAGES = [
-      { code: 'zh-HK', flag: '🇭🇰', label: '繁中' },
-      { code: 'zh-CN', flag: '🇨🇳', label: '简中' },
-      { code: 'en',    flag: '🇬🇧', label: 'EN' },
-      { code: 'ja',    flag: '🇯🇵', label: 'JP' },
-      { code: 'ko',    flag: '🇰🇷', label: 'KR' },
-      { code: 'fr',    flag: '🇫🇷', label: 'FR' }
-    ];
-
     let currentLang = localStorage.getItem('lunchOracleLang') || 'zh-HK';
 
     const UI = {
-      title:          { 'zh-HK': '🔮 今日食乜好？', 'zh-CN': '🔮 今天吃什么？', en: '🔮 What to Eat Today?', ja: '🔮 今日何食べる？', ko: '🔮 오늘 뭐 먹지?', fr: '🔮 On mange quoi ?' },
-      subtitle:       { 'zh-HK': 'Times Square 午餐神諭 Lunch Oracle', 'zh-CN': '黄龙国际中心 · 午餐神谕', en: 'Times Square Lunch Oracle', ja: 'Times Square ランチ神託', ko: 'Times Square 점심 신탁', fr: 'Times Square · Oracle du Déjeuner' },
-      drawBtn:        { 'zh-HK': '🎴 求籤！Draw Your Lunch Fortune', 'zh-CN': '🎴 求签！抽取你的午餐运势', en: '🎴 Draw Your Lunch Fortune!', ja: '🎴 おみくじを引く！', ko: '🎴 점심 운세 뽑기!', fr: '🎴 Tirez votre carte déjeuner !' },
-      pickYourself:   { 'zh-HK': '或自己揀 Or pick yourself ↓', 'zh-CN': '或者自己选 ↓', en: 'Or pick yourself ↓', ja: 'または自分で選ぶ ↓', ko: '또는 직접 선택 ↓', fr: 'Ou choisissez vous-même ↓' },
-      sectionDivider: { 'zh-HK': '自己揀 Pick yourself', 'zh-CN': '自己选', en: 'Pick yourself', ja: '自分で選ぶ', ko: '직접 선택', fr: 'Choisir soi-même' },
-      todayElement:   { 'zh-HK': '今日五行：', 'zh-CN': '今日五行：', en: "Today's Element: ", ja: '今日の五行：', ko: '오늘의 오행: ', fr: "Élément du jour : " },
-      lunchFortune:   { 'zh-HK': '午餐運勢 Lunch Fortune', 'zh-CN': '午餐运势', en: 'Lunch Fortune', ja: 'ランチ運勢', ko: '점심 운세', fr: 'Fortune du déjeuner' },
-      oracleLabel:    { 'zh-HK': '今日午餐神諭 Lunch Oracle', 'zh-CN': '今日午餐神谕', en: "Today's Lunch Oracle", ja: '今日のランチ神託', ko: '오늘의 점심 신탁', fr: 'Oracle du Déjeuner' },
-      btnAccept:      { 'zh-HK': '✅ 就係佢！就食呢個', 'zh-CN': '✅ 就是它！就吃这个', en: '✅ This is it! Let\'s eat!', ja: '✅ これに決めた！', ko: '✅ 이거다! 먹자!', fr: '✅ C\'est décidé ! On y va !' },
-      btnRedraw:      { 'zh-HK': '🔄 唔啱！再求一次', 'zh-CN': '🔄 不行！再来一次', en: '🔄 Nah! Draw again', ja: '🔄 もう一回引く！', ko: '🔄 다시 뽑기!', fr: '🔄 Non ! Retirer une carte' },
-      btnShare:       { 'zh-HK': '📋 分享', 'zh-CN': '📋 分享', en: '📋 Share', ja: '📋 シェア', ko: '📋 공유', fr: '📋 Partager' },
-      btnBrowse:      { 'zh-HK': '📂 自己揀', 'zh-CN': '📂 自己选', en: '📂 Browse', ja: '📂 自分で選ぶ', ko: '📂 직접 선택', fr: '📂 Parcourir' },
-      btnBack:        { 'zh-HK': '← 返回', 'zh-CN': '← 返回', en: '← Back', ja: '← 戻る', ko: '← 돌아가기', fr: '← Retour' },
-      justCategory:   { 'zh-HK': '就要{name}！', 'zh-CN': '就要{name}！', en: 'Just {name}!', ja: '{name}でお願い！', ko: '{name}으로 할래!', fr: '{name}, tout simplement !' },
-      dishDivider:    { 'zh-HK': '或揀一個餸 or pick a dish', 'zh-CN': '或者选一道菜', en: 'Or pick a dish', ja: 'または料理を選ぶ', ko: '또는 요리 선택', fr: 'Ou choisir un plat' },
-      fortuneRevealed:{ 'zh-HK': '神諭已出！', 'zh-CN': '神谕已出！', en: 'Fortune revealed!', ja: '神託が出ました！', ko: '신탁이 나왔습니다!', fr: 'La carte est révélée !' },
-      enjoyMeal:      { 'zh-HK': '🎉 食嘅開心！', 'zh-CN': '🎉 吃得开心！', en: '🎉 Enjoy your meal!', ja: '🎉 いただきます！', ko: '🎉 맛있게 드세요!', fr: '🎉 Bon appétit !' },
-      copied:         { 'zh-HK': '✅ 已複製！', 'zh-CN': '✅ 已复制！', en: '✅ Copied!', ja: '✅ コピーしました！', ko: '✅ 복사됨!', fr: '✅ Copié !' },
-      luckyColor:     { 'zh-HK': '幸運色：', 'zh-CN': '幸运色：', en: 'Lucky color: ', ja: 'ラッキーカラー：', ko: '행운의 색: ', fr: 'Couleur porte-bonheur : ' },
-      elementSuffix:  { 'zh-HK': '行', 'zh-CN': '行', en: '', ja: '行', ko: '행', fr: '' },
-      findRestaurant: { 'zh-HK': '🍽️ 去 OpenRice 搵餐廳', 'zh-CN': '📍 去大众点评找餐厅', en: '📍 Find on Google Maps', ja: '📍 Google Mapsで探す', ko: '📍 Google Maps에서 찾기', fr: '📍 Trouver sur Google Maps' }
+      title:          { 'zh-HK': '🔮 今日食乜好？', 'zh-CN': '🔮 今天吃什么？' },
+      subtitle:       { 'zh-HK': 'Times Square 午餐神諭', 'zh-CN': '黄龙万科E座 · 午餐神谕' },
+      drawBtn:        { 'zh-HK': '🎴 求籤！幫我揀午餐', 'zh-CN': '🎴 求签！帮我选午餐' },
+      pickYourself:   { 'zh-HK': '或自己揀 ↓', 'zh-CN': '或者自己选 ↓' },
+      sectionDivider: { 'zh-HK': '自己揀', 'zh-CN': '自己选' },
+      todayElement:   { 'zh-HK': '今日五行：', 'zh-CN': '今日五行：' },
+      lunchFortune:   { 'zh-HK': '午餐運勢', 'zh-CN': '午餐运势' },
+      oracleLabel:    { 'zh-HK': '今日午餐神諭', 'zh-CN': '今日午餐神谕' },
+      btnAccept:      { 'zh-HK': '✅ 就係佢！就食呢間', 'zh-CN': '✅ 就是它！就吃这家' },
+      btnRedraw:      { 'zh-HK': '🔄 唔啱！再求一次', 'zh-CN': '🔄 不行！再来一次' },
+      btnShare:       { 'zh-HK': '📋 分享', 'zh-CN': '📋 分享' },
+      btnBrowse:      { 'zh-HK': '📂 自己揀', 'zh-CN': '📂 自己选' },
+      btnBack:        { 'zh-HK': '← 返回', 'zh-CN': '← 返回' },
+      browseTitle:    { 'zh-HK': '附近餐廳', 'zh-CN': '附近餐厅' },
+      fortuneRevealed:{ 'zh-HK': '神諭已出！', 'zh-CN': '神谕已出！' },
+      enjoyMeal:      { 'zh-HK': '🎉 食嘅開心！', 'zh-CN': '🎉 吃得开心！' },
+      copied:         { 'zh-HK': '✅ 已複製！', 'zh-CN': '✅ 已复制！' },
+      luckyColor:     { 'zh-HK': '幸運色：', 'zh-CN': '幸运色：' },
+      elementSuffix:  { 'zh-HK': '行', 'zh-CN': '行' },
+      prefTitle:      { 'zh-HK': '⚙️ 設定偏好', 'zh-CN': '⚙️ 设置偏好' },
+      prefDiners:     { 'zh-HK': '用餐人數', 'zh-CN': '用餐人数' },
+      prefFlavor:     { 'zh-HK': '今日胃口', 'zh-CN': '今日胃口' },
+      prefBudget:     { 'zh-HK': '人均預算', 'zh-CN': '人均预算' },
+      prefTime:       { 'zh-HK': '用餐時間', 'zh-CN': '用餐时间' },
+      prefDietary:    { 'zh-HK': '飲食限制', 'zh-CN': '饮食限制' },
+      prefScene:      { 'zh-HK': '用餐場景', 'zh-CN': '用餐场景' },
+      historyLabel:   { 'zh-HK': '🕐 最近食過', 'zh-CN': '🕐 最近吃过' },
+      historyClear:   { 'zh-HK': '清除', 'zh-CN': '清除' },
+      exclude:        { 'zh-HK': '排除', 'zh-CN': '排除' },
+      excluded:       { 'zh-HK': '已排除', 'zh-CN': '已排除' },
+      recDishes:      { 'zh-HK': '推薦菜品：', 'zh-CN': '推荐菜品：' },
+      perPerson:      { 'zh-HK': '人均', 'zh-CN': '人均' },
+      noResult:       { 'zh-HK': '冇搵到合適餐廳，試下調整偏好？', 'zh-CN': '没找到合适餐厅，试试调整偏好？' }
     };
 
-    function t(key) { return UI[key]?.[currentLang] || UI[key]?.['en'] || ''; }
+    function t(key) { return UI[key]?.[currentLang] || ''; }
 
     // =============================================
-    // FOOD DATA (multi-language)
+    // PREFERENCE OPTIONS (language-aware)
     // =============================================
-    const FOOD_DATA = [
-      { id:'chinese', emoji:'🥡',
-        name:{'zh-HK':'粵菜','zh-CN':'杭帮菜',en:'Chinese',ja:'中華料理',ko:'중국요리',fr:'Chinois'},
-        sub:{'zh-HK':'Chinese','zh-CN':'外婆家/绿茶',en:'Cantonese',ja:'Chinese',ko:'Chinese',fr:'Cantonais'},
-        dishes:[
-          {n:{'zh-HK':'叉燒飯','zh-CN':'外婆家·茶香鸡',en:'BBQ Pork Rice',ja:'チャーシュー丼',ko:'차슈덮밥',fr:'Riz au porc laqué'}},
-          {n:{'zh-HK':'雲吞麵','zh-CN':'外婆家·西湖醋鱼',en:'Wonton Noodle',ja:'ワンタン麺',ko:'완탕면',fr:'Nouilles aux wontons'}},
-          {n:{'zh-HK':'煲仔飯','zh-CN':'外婆家·外婆红烧肉',en:'Claypot Rice',ja:'土鍋ご飯',ko:'뚝배기밥',fr:'Riz en cocotte'}},
-          {n:{'zh-HK':'點心','zh-CN':'绿茶·绿茶烤鸡',en:'Dim Sum',ja:'飲茶・点心',ko:'딤섬',fr:'Dim Sum'}},
-          {n:{'zh-HK':'燒鵝','zh-CN':'绿茶·面包诱惑',en:'Roast Goose',ja:'ローストグース',ko:'로스트 거위',fr:'Oie rôtie'}},
-          {n:{'zh-HK':'蒸魚','zh-CN':'绿茶·石锅鸡汤豆腐',en:'Steamed Fish',ja:'蒸し魚',ko:'찐 생선',fr:'Poisson vapeur'}}
-      ]},
-      { id:'japanese', emoji:'🍣',
-        name:{'zh-HK':'日本料理','zh-CN':'日料',en:'Japanese',ja:'和食',ko:'일식',fr:'Japonais'},
-        sub:{'zh-HK':'Japanese','zh-CN':'竹里·栩/和一',en:'Sushi & more',ja:'和食',ko:'Japanese',fr:'Sushi & plus'},
-        dishes:[
-          {n:{'zh-HK':'刺身丼','zh-CN':'竹里·栩·刺身拼盘',en:'Sashimi Don',ja:'海鮮丼',ko:'사시미동',fr:'Chirashi'}},
-          {n:{'zh-HK':'拉麵','zh-CN':'和一料理·豚骨拉面',en:'Ramen',ja:'ラーメン',ko:'라멘',fr:'Ramen'}},
-          {n:{'zh-HK':'吉列豬扒飯','zh-CN':'竹里·栩·寿司套餐',en:'Katsu Don',ja:'カツ丼',ko:'카츠동',fr:'Katsu Don'}},
-          {n:{'zh-HK':'烏冬','zh-CN':'和一料理·天妇罗定食',en:'Udon',ja:'うどん',ko:'우동',fr:'Udon'}},
-          {n:{'zh-HK':'便當','zh-CN':'和一料理·鳗鱼饭',en:'Bento Box',ja:'お弁当',ko:'벤토',fr:'Bento'}},
-          {n:{'zh-HK':'日式咖喱飯','zh-CN':'竹里·栩·日式自助',en:'Japanese Curry',ja:'カレーライス',ko:'일본카레',fr:'Curry japonais'}}
-      ]},
-      { id:'korean', emoji:'🍱',
-        name:{'zh-HK':'韓國料理','zh-CN':'海鲜大排档',en:'Korean',ja:'韓国料理',ko:'한식',fr:'Coréen'},
-        sub:{'zh-HK':'Korean','zh-CN':'黄龙玉古路',en:'K-food',ja:'Korean',ko:'한식',fr:'K-food'},
-        dishes:[
-          {n:{'zh-HK':'拌飯','zh-CN':'黄龙海鲜·椒盐皮皮虾',en:'Bibimbap',ja:'ビビンバ',ko:'비빔밥',fr:'Bibimbap'}},
-          {n:{'zh-HK':'泡菜湯','zh-CN':'黄龙海鲜·东海三鲜',en:'Kimchi Stew',ja:'キムチチゲ',ko:'김치찌개',fr:'Ragoût de kimchi'}},
-          {n:{'zh-HK':'韓式炸雞','zh-CN':'黄龙海鲜·海鲜炒粉干',en:'Korean Fried Chicken',ja:'ヤンニョムチキン',ko:'양념치킨',fr:'Poulet frit coréen'}},
-          {n:{'zh-HK':'烤肉','zh-CN':'黄龙海鲜·清蒸大闸蟹',en:'Bulgogi',ja:'プルコギ',ko:'불고기',fr:'Bulgogi'}},
-          {n:{'zh-HK':'辣炒年糕','zh-CN':'黄龙海鲜·白灼基围虾',en:'Tteokbokki',ja:'トッポギ',ko:'떡볶이',fr:'Tteokbokki'}},
-          {n:{'zh-HK':'部隊鍋','zh-CN':'黄龙海鲜·葱油梭子蟹',en:'Army Stew',ja:'ブデチゲ',ko:'부대찌개',fr:'Budae-jjigae'}}
-      ]},
-      { id:'thai', emoji:'🍛',
-        name:{'zh-HK':'泰國菜','zh-CN':'东南亚菜',en:'Thai',ja:'タイ料理',ko:'태국요리',fr:'Thaïlandais'},
-        sub:{'zh-HK':'Thai','zh-CN':'南洋往事',en:'Spicy & sweet',ja:'Thai',ko:'Thai',fr:'Épicé & doux'},
-        dishes:[
-          {n:{'zh-HK':'泰式炒河粉','zh-CN':'南洋往事·海南鸡饭',en:'Pad Thai',ja:'パッタイ',ko:'팟타이',fr:'Pad Thaï'}},
-          {n:{'zh-HK':'綠咖喱','zh-CN':'南洋往事·叻沙',en:'Green Curry',ja:'グリーンカレー',ko:'그린커리',fr:'Curry vert'}},
-          {n:{'zh-HK':'冬陰功湯','zh-CN':'南洋往事·冬阴功汤',en:'Tom Yum Soup',ja:'トムヤムクン',ko:'똠양꿍',fr:'Tom Yum'}},
-          {n:{'zh-HK':'芒果糯米飯','zh-CN':'南洋往事·肉骨茶',en:'Mango Sticky Rice',ja:'マンゴーもち米',ko:'망고찹쌀밥',fr:'Riz gluant à la mangue'}},
-          {n:{'zh-HK':'打拋豬飯','zh-CN':'南洋往事·咖喱叻沙面',en:'Basil Chicken Rice',ja:'ガパオライス',ko:'까파오라이스',fr:'Riz au basilic thaï'}},
-          {n:{'zh-HK':'菠蘿飯','zh-CN':'南洋往事·椰浆饭',en:'Pineapple Rice',ja:'パイナップル炒飯',ko:'파인애플볶음밥',fr:'Riz à l\'ananas'}}
-      ]},
-      { id:'vietnamese', emoji:'🍜',
-        name:{'zh-HK':'越南菜','zh-CN':'面馆',en:'Vietnamese',ja:'ベトナム料理',ko:'베트남요리',fr:'Vietnamien'},
-        sub:{'zh-HK':'Vietnamese','zh-CN':'苏面坊/慧娟/相缘',en:'Fresh & light',ja:'Vietnamese',ko:'Vietnamese',fr:'Frais & léger'},
-        dishes:[
-          {n:{'zh-HK':'越南牛肉粉','zh-CN':'苏面坊·秃黄油面',en:'Pho',ja:'フォー',ko:'쌀국수',fr:'Phở'}},
-          {n:{'zh-HK':'越南法包','zh-CN':'苏面坊·蟹粉虾仁面',en:'Banh Mi',ja:'バインミー',ko:'반미',fr:'Bánh mì'}},
-          {n:{'zh-HK':'越南春卷','zh-CN':'慧娟面馆·片儿川',en:'Spring Rolls',ja:'生春巻き',ko:'스프링롤',fr:'Rouleaux de printemps'}},
-          {n:{'zh-HK':'越南豬肉檬粉','zh-CN':'慧娟面馆·爆鳝面',en:'Bun Cha',ja:'ブンチャー',ko:'분짜',fr:'Bun Cha'}},
-          {n:{'zh-HK':'碎米飯','zh-CN':'相缘面馆·大排面',en:'Broken Rice',ja:'コムタム',ko:'꼼땀',fr:'Riz brisé'}},
-          {n:{'zh-HK':'越南咖啡','zh-CN':'相缘面馆·酸菜牛腩面',en:'Vietnamese Coffee',ja:'ベトナムコーヒー',ko:'베트남커피',fr:'Café vietnamien'}}
-      ]},
-      { id:'western', emoji:'🍔',
-        name:{'zh-HK':'西餐','zh-CN':'西餐',en:'Western',ja:'洋食',ko:'양식',fr:'Occidental'},
-        sub:{'zh-HK':'Western','zh-CN':'WADE\'S/必胜客',en:'Burgers & more',ja:'Western',ko:'Western',fr:'Burgers & plus'},
-        dishes:[
-          {n:{'zh-HK':'漢堡','zh-CN':'WADE\'S·安格斯牛排',en:'Burger',ja:'ハンバーガー',ko:'버거',fr:'Burger'}},
-          {n:{'zh-HK':'意粉','zh-CN':'WADE\'S·墨鱼汁烩饭',en:'Pasta',ja:'パスタ',ko:'파스타',fr:'Pâtes'}},
-          {n:{'zh-HK':'牛扒','zh-CN':'WADE\'S·经典汉堡',en:'Steak',ja:'ステーキ',ko:'스테이크',fr:'Steak'}},
-          {n:{'zh-HK':'薄餅','zh-CN':'必胜客·超级至尊披萨',en:'Pizza',ja:'ピザ',ko:'피자',fr:'Pizza'}},
-          {n:{'zh-HK':'炸魚薯條','zh-CN':'必胜客·意式肉酱面',en:'Fish & Chips',ja:'フィッシュ＆チップス',ko:'피시앤칩스',fr:'Fish & Chips'}},
-          {n:{'zh-HK':'三文治','zh-CN':'必胜客·新奥尔良烤翅',en:'Sandwich',ja:'サンドイッチ',ko:'샌드위치',fr:'Sandwich'}}
-      ]},
-      { id:'taiwanese', emoji:'🧋',
-        name:{'zh-HK':'台灣菜','zh-CN':'煲仔饭/炖汤',en:'Taiwanese',ja:'台湾料理',ko:'대만요리',fr:'Taïwanais'},
-        sub:{'zh-HK':'Taiwanese','zh-CN':'煮饭佬K-Lab',en:'Street food',ja:'Taiwanese',ko:'Taiwanese',fr:'Street food'},
-        dishes:[
-          {n:{'zh-HK':'滷肉飯','zh-CN':'煮饭佬·腊味煲仔饭',en:'Braised Pork Rice',ja:'ルーロー飯',ko:'루로우판',fr:'Riz au porc braisé'}},
-          {n:{'zh-HK':'牛肉麵','zh-CN':'煮饭佬·窝蛋牛肉煲仔饭',en:'Beef Noodle Soup',ja:'牛肉麺',ko:'우육면',fr:'Soupe de nouilles au bœuf'}},
-          {n:{'zh-HK':'鹽酥雞','zh-CN':'煮饭佬·滑鸡煲仔饭',en:'Popcorn Chicken',ja:'鹹酥鶏',ko:'옌수지',fr:'Poulet popcorn'}},
-          {n:{'zh-HK':'小籠包','zh-CN':'煮饭佬·豉汁排骨煲仔饭',en:'Xiao Long Bao',ja:'小籠包',ko:'샤오롱바오',fr:'Xiao Long Bao'}},
-          {n:{'zh-HK':'蔥油餅','zh-CN':'煮饭佬·北菇鸡炖盅',en:'Scallion Pancake',ja:'葱油餅',ko:'파전병',fr:'Crêpe à la ciboule'}},
-          {n:{'zh-HK':'珍珠奶茶','zh-CN':'煮饭佬·花胶鸡炖汤',en:'Bubble Tea',ja:'タピオカミルクティー',ko:'버블티',fr:'Bubble Tea'}}
-      ]},
-      { id:'indian', emoji:'🫓',
-        name:{'zh-HK':'印度菜','zh-CN':'火锅',en:'Indian',ja:'インド料理',ko:'인도요리',fr:'Indien'},
-        sub:{'zh-HK':'Indian','zh-CN':'川炉/御牛道',en:'Curry & spice',ja:'Indian',ko:'Indian',fr:'Curry & épices'},
-        dishes:[
-          {n:{'zh-HK':'牛油雞','zh-CN':'川炉·麻辣牛油锅',en:'Butter Chicken',ja:'バターチキン',ko:'버터치킨',fr:'Poulet au beurre'}},
-          {n:{'zh-HK':'印度炒飯','zh-CN':'川炉·番茄锅',en:'Biryani',ja:'ビリヤニ',ko:'비리야니',fr:'Biryani'}},
-          {n:{'zh-HK':'烤餅配咖喱','zh-CN':'川炉·鸳鸯锅',en:'Naan + Curry',ja:'ナン＋カレー',ko:'난+카레',fr:'Naan + Curry'}},
-          {n:{'zh-HK':'坦都里雞','zh-CN':'御牛道·潮汕牛肉锅',en:'Tandoori Chicken',ja:'タンドリーチキン',ko:'탄두리치킨',fr:'Poulet tandoori'}},
-          {n:{'zh-HK':'咖喱角','zh-CN':'御牛道·手切鲜牛肉',en:'Samosa',ja:'サモサ',ko:'사모사',fr:'Samosa'}},
-          {n:{'zh-HK':'印度扁豆','zh-CN':'御牛道·牛肉丸拼盘',en:'Dal Makhani',ja:'ダール',ko:'달 마카니',fr:'Dal Makhani'}}
-      ]},
-      { id:'salad-healthy', emoji:'🥗',
-        name:{'zh-HK':'沙律/健康餐','zh-CN':'轻食简餐',en:'Salad / Healthy',ja:'サラダ・ヘルシー',ko:'샐러드/건강식',fr:'Salade / Healthy'},
-        sub:{'zh-HK':'Healthy','zh-CN':'黄龙周边',en:'Light & fresh',ja:'Healthy',ko:'Healthy',fr:'Léger & frais'},
-        dishes:[
-          {n:{'zh-HK':'夏威夷魚生飯','zh-CN':'沙拉到·鸡胸肉沙拉',en:'Poke Bowl',ja:'ポキ丼',ko:'포케볼',fr:'Poké Bowl'}},
-          {n:{'zh-HK':'巴西莓碗','zh-CN':'鲜果时间·酸奶果昔碗',en:'Acai Bowl',ja:'アサイーボウル',ko:'아사이볼',fr:'Bol d\'açaï'}},
-          {n:{'zh-HK':'雞肉沙律','zh-CN':'轻食·藜麦牛肉碗',en:'Chicken Salad',ja:'チキンサラダ',ko:'치킨샐러드',fr:'Salade de poulet'}},
-          {n:{'zh-HK':'穀物碗','zh-CN':'轻食·三文鱼牛油果碗',en:'Grain Bowl',ja:'グレインボウル',ko:'곡물볼',fr:'Bol de céréales'}},
-          {n:{'zh-HK':'湯品套餐','zh-CN':'黄龙饭店·养生汤定食',en:'Soup Set',ja:'スープセット',ko:'수프세트',fr:'Formule soupe'}},
-          {n:{'zh-HK':'墨西哥卷','zh-CN':'轻食·全麦鸡肉卷',en:'Wrap',ja:'ラップサンド',ko:'랩',fr:'Wrap'}}
-      ]},
-      { id:'fast-food', emoji:'🍟',
-        name:{'zh-HK':'快餐','zh-CN':'快餐',en:'Fast Food',ja:'ファストフード',ko:'패스트푸드',fr:'Fast-food'},
-        sub:{'zh-HK':'Fast Food','zh-CN':'麦当劳/老乡鸡',en:'Quick & easy',ja:'Fast Food',ko:'Fast Food',fr:'Rapide'},
-        dishes:[
-          {n:{'zh-HK':'麥當勞套餐','zh-CN':'麦当劳·巨无霸套餐',en:"McDonald's Set",ja:'マクドナルド',ko:'맥도날드세트',fr:'Menu McDonald\'s'}},
-          {n:{'zh-HK':'肯德基','zh-CN':'肯德基·吮指原味鸡',en:'KFC',ja:'ケンタッキー',ko:'KFC',fr:'KFC'}},
-          {n:{'zh-HK':'吉野家','zh-CN':'老乡鸡·老母鸡汤套餐',en:'Yoshinoya',ja:'吉野家',ko:'요시노야',fr:'Yoshinoya'}},
-          {n:{'zh-HK':'大快活','zh-CN':'大米先生·小炒肉套餐',en:'Fairwood',ja:'大快活',ko:'페어우드',fr:'Fairwood'}},
-          {n:{'zh-HK':'大家樂','zh-CN':'吉野家·牛肉饭',en:'Cafe de Coral',ja:'大家楽',ko:'카페드코랄',fr:'Café de Coral'}},
-          {n:{'zh-HK':'美心MX','zh-CN':'汉堡王·皇堡套餐',en:"Maxim's",ja:'美心MX',ko:'막심스',fr:"Maxim's"}}
-      ]},
-      { id:'congee-noodles', emoji:'🍲',
-        name:{'zh-HK':'粥麵','zh-CN':'小吃',en:'Congee / Noodles',ja:'お粥・麺',ko:'죽/면',fr:'Congee / Nouilles'},
-        sub:{'zh-HK':'Congee','zh-CN':'新丰/知味观',en:'Comfort food',ja:'Congee',ko:'Congee',fr:'Réconfortant'},
-        dishes:[
-          {n:{'zh-HK':'粥','zh-CN':'新丰小吃·虾肉小笼',en:'Congee',ja:'お粥',ko:'죽',fr:'Congee'}},
-          {n:{'zh-HK':'車仔麵','zh-CN':'新丰小吃·牛肉粉丝',en:'Cart Noodle',ja:'車仔麺',ko:'카트누들',fr:'Nouilles de chariot'}},
-          {n:{'zh-HK':'魚蛋粉','zh-CN':'知味观·猫耳朵',en:'Fish Ball Noodle',ja:'魚団子麺',ko:'어묵국수',fr:'Nouilles aux boulettes'}},
-          {n:{'zh-HK':'牛腩麵','zh-CN':'知味观·小笼包',en:'Beef Brisket Noodle',ja:'牛バラ麺',ko:'우삼겹국수',fr:'Nouilles au bœuf'}},
-          {n:{'zh-HK':'腸粉','zh-CN':'知味观·片儿川',en:'Rice Noodle Roll',ja:'腸粉',ko:'장분',fr:'Rouleaux de riz'}},
-          {n:{'zh-HK':'撈麵','zh-CN':'新丰小吃·大肉包',en:'Lo Mein',ja:'撈麺',ko:'로메인',fr:'Lo Mein'}}
-      ]},
-      { id:'desserts-drinks', emoji:'🧁',
-        name:{'zh-HK':'甜品/飲品','zh-CN':'茶饮甜品',en:'Desserts / Drinks',ja:'スイーツ・ドリンク',ko:'디저트/음료',fr:'Desserts / Boissons'},
-        sub:{'zh-HK':'Desserts','zh-CN':'奈雪/一点点',en:'Sweet treats',ja:'Desserts',ko:'Desserts',fr:'Douceurs'},
-        dishes:[
-          {n:{'zh-HK':'珍珠奶茶','zh-CN':'一点点·波霸奶茶',en:'Bubble Tea',ja:'タピオカミルクティー',ko:'버블티',fr:'Bubble Tea'}},
-          {n:{'zh-HK':'楊枝甘露','zh-CN':'奈雪的茶·霸气芝士草莓',en:'Mango Sago',ja:'マンゴーサゴ',ko:'망고사고',fr:'Mangue-sagou'}},
-          {n:{'zh-HK':'雞蛋仔','zh-CN':'奈雪的茶·软欧包',en:'Egg Waffle',ja:'エッグワッフル',ko:'에그와플',fr:'Gaufre à bulles'}},
-          {n:{'zh-HK':'港式奶茶','zh-CN':'芋说·椰子冻',en:'HK Milk Tea',ja:'香港ミルクティー',ko:'홍콩밀크티',fr:'Thé au lait HK'}},
-          {n:{'zh-HK':'豆腐花','zh-CN':'鹿松·可颂面包',en:'Tofu Pudding',ja:'豆腐花',ko:'두부푸딩',fr:'Tofu soyeux'}},
-          {n:{'zh-HK':'水果茶','zh-CN':'一点点·四季春茶',en:'Fruit Tea',ja:'フルーツティー',ko:'과일차',fr:'Thé aux fruits'}}
-      ]}
-    ];
+    const PREF_OPTIONS = {
+      diners: {
+        'zh-HK': [{v:1,l:'1人'},{v:2,l:'2人'},{v:3,l:'3-4人'},{v:4,l:'5人+'}],
+        'zh-CN': [{v:1,l:'1人'},{v:2,l:'2人'},{v:3,l:'3-4人'},{v:4,l:'5人+'}]
+      },
+      flavor: {
+        'zh-HK': [{v:'heavy',l:'重口味 🔥'},{v:'light',l:'清淡 🥬'},{v:null,l:'隨便 😌'}],
+        'zh-CN': [{v:'heavy',l:'重口味 🔥'},{v:'light',l:'清淡 🥬'},{v:null,l:'随便 😌'}]
+      },
+      budget: {
+        'zh-HK': [{v:0,l:'<50 HKD'},{v:1,l:'50-100'},{v:2,l:'100-200'},{v:3,l:'200+'}],
+        'zh-CN': [{v:0,l:'<30元'},{v:1,l:'30-60元'},{v:2,l:'60-100元'},{v:3,l:'100+元'}]
+      },
+      time: {
+        'zh-HK': [{v:'fast',l:'趕時間 ⚡'},{v:'normal',l:'正常 🕐'},{v:'slow',l:'唔急 ☕'}],
+        'zh-CN': [{v:'fast',l:'赶时间 ⚡'},{v:'normal',l:'正常 🕐'},{v:'slow',l:'不急 ☕'}]
+      },
+      dietary: {
+        'zh-HK': [{v:null,l:'無限制'},{v:'veggie',l:'素食 🥬'},{v:'halal',l:'清真 🕌'},{v:'no-spicy',l:'唔食辣 🚫'},{v:'no-seafood',l:'海鮮過敏 ⚠️'}],
+        'zh-CN': [{v:null,l:'无限制'},{v:'veggie',l:'素食 🥬'},{v:'halal',l:'清真 🕌'},{v:'no-spicy',l:'不吃辣 🚫'},{v:'no-seafood',l:'海鲜过敏 ⚠️'}]
+      },
+      scene: {
+        'zh-HK': [{v:'casual',l:'自己食 🍚'},{v:'treat',l:'請客 🎁'},{v:'date',l:'約會 ❤️'},{v:'team',l:'團建 🎉'}],
+        'zh-CN': [{v:'casual',l:'自己吃 🍚'},{v:'treat',l:'请客 🎁'},{v:'date',l:'约会 ❤️'},{v:'team',l:'团建 🎉'}]
+      }
+    };
+
+    const BUDGET_LABELS = {
+      'zh-HK': ['<50 HKD', '50-100 HKD', '100-200 HKD', '200+ HKD'],
+      'zh-CN': ['<30元', '30-60元', '60-100元', '100+元']
+    };
 
     // =============================================
-    // ELEMENTS + CULTURALLY ADAPTED FORTUNES
+    // RESTAURANT DATABASE
+    // =============================================
+    const CATEGORIES = {
+      'zh-HK': [
+        { id:'noodles', emoji:'🍜', name:'粥麵' },
+        { id:'chinese', emoji:'🥡', name:'粵菜' },
+        { id:'japanese', emoji:'🍣', name:'日本料理' },
+        { id:'fast-food', emoji:'🍟', name:'快餐' },
+        { id:'western', emoji:'🍔', name:'西餐' },
+        { id:'korean', emoji:'🍱', name:'韓國菜' },
+        { id:'southeast-asian', emoji:'🍛', name:'東南亞' },
+        { id:'healthy', emoji:'🥗', name:'健康餐' }
+      ],
+      'zh-CN': [
+        { id:'chinese', emoji:'🥡', name:'杭帮菜' },
+        { id:'noodles', emoji:'🍜', name:'面馆' },
+        { id:'japanese', emoji:'🍣', name:'日料' },
+        { id:'fast-food', emoji:'🍟', name:'快餐' },
+        { id:'hotpot', emoji:'🍲', name:'火锅' },
+        { id:'seafood', emoji:'🦐', name:'海鲜' },
+        { id:'southeast-asian', emoji:'🍛', name:'东南亚' },
+        { id:'snacks', emoji:'🧁', name:'小吃轻食' }
+      ]
+    };
+
+    const RESTAURANT_DB = {
+      'zh-HK': [
+        // === 粥麵 ===
+        { id:'tam-jai', name:'譚仔三哥米線', emoji:'🌶️', category:'noodles',
+          flavor:'heavy', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約3分鐘',
+          dietaryTags:['no-seafood'], scene:['casual'],
+          dishes:[{name:'麻辣米線',note:'小辣就夠'},{name:'10號麻辣雞煲米線',note:'招牌推薦'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E8%AD%9A%E4%BB%94%E4%B8%89%E5%93%A5&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E8%AD%9A%E4%BB%94%E4%B8%89%E5%93%A5',maps:'https://www.google.com/maps/search/%E8%AD%9A%E4%BB%94%E4%B8%89%E5%93%A5%E7%B1%B3%E7%B7%9A+Causeway+Bay'}},
+        { id:'ho-hung-kee', name:'何洪記粥麵', emoji:'🍜', category:'noodles',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約5分鐘',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'鮮蝦雲吞麵',note:'必食招牌'},{name:'牛腩河粉',note:'濃香入味'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E4%BD%95%E6%B4%AA%E8%A8%98&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E4%BD%95%E6%B4%AA%E8%A8%98',maps:'https://www.google.com/maps/search/%E4%BD%95%E6%B4%AA%E8%A8%98+Causeway+Bay'}},
+        { id:'tsim-chai-kee', name:'沾仔記', emoji:'🥟', category:'noodles',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約8分鐘',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'雲吞麵',note:'皮薄餡靚'},{name:'水餃麵',note:'手工水餃'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E6%B2%BE%E4%BB%94%E8%A8%98&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E6%B2%BE%E4%BB%94%E8%A8%98',maps:'https://www.google.com/maps/search/%E6%B2%BE%E4%BB%94%E8%A8%98+Causeway+Bay'}},
+
+        // === 粵菜 ===
+        { id:'joy-hing', name:'再興燒臘飯店', emoji:'🍗', category:'chinese',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約4分鐘',
+          dietaryTags:['no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'叉燒飯',note:'肥瘦均勻'},{name:'燒鵝飯',note:'皮脆肉嫩'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E5%86%8D%E8%88%88%E7%87%92%E8%87%98&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E5%86%8D%E8%88%88%E7%87%92%E8%87%98',maps:'https://www.google.com/maps/search/%E5%86%8D%E8%88%88%E7%87%92%E8%87%98%E9%A3%AF%E5%BA%97+Causeway+Bay'}},
+        { id:'tai-hing', name:'太興', emoji:'🍖', category:'chinese',
+          flavor:'neutral', groupSize:[1,2,3], budget:0, timeNeeded:'fast', distance:'步行約2分鐘',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'太興燒味飯',note:'燒鵝叉燒拼盤'},{name:'冰鎮奶茶',note:'配飯必備'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E5%A4%AA%E8%88%88&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E5%A4%AA%E8%88%88',maps:'https://www.google.com/maps/search/%E5%A4%AA%E8%88%88+Times+Square+Causeway+Bay'}},
+        { id:'crystal-jade', name:'翡翠拉麵小籠包', emoji:'🥟', category:'chinese',
+          flavor:'light', groupSize:[2,3,4], budget:1, timeNeeded:'normal', distance:'步行約2分鐘',
+          dietaryTags:['no-spicy'], scene:['casual','date','treat'],
+          dishes:[{name:'小籠包',note:'經典必點'},{name:'擔擔麵',note:'微辣香濃'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E7%BF%A1%E7%BF%A0%E6%8B%89%E9%BA%B5%E5%B0%8F%E7%B1%A0%E5%8C%85&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E7%BF%A1%E7%BF%A0%E6%8B%89%E9%BA%B5',maps:'https://www.google.com/maps/search/%E7%BF%A1%E7%BF%A0%E6%8B%89%E9%BA%B5%E5%B0%8F%E7%B1%A0%E5%8C%85+Causeway+Bay'}},
+        { id:'dim-dim-sum', name:'點點心', emoji:'🧆', category:'chinese',
+          flavor:'neutral', groupSize:[2,3,4], budget:1, timeNeeded:'normal', distance:'步行約6分鐘',
+          dietaryTags:[], scene:['casual','date','treat'],
+          dishes:[{name:'流沙包',note:'必食招牌'},{name:'豬仔包',note:'造型可愛'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E9%BB%9E%E9%BB%9E%E5%BF%83&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E9%BB%9E%E9%BB%9E%E5%BF%83',maps:'https://www.google.com/maps/search/%E9%BB%9E%E9%BB%9E%E5%BF%83+Causeway+Bay'}},
+
+        // === 日本料理 ===
+        { id:'genki-sushi', name:'元氣壽司', emoji:'🍣', category:'japanese',
+          flavor:'light', groupSize:[1,2], budget:1, timeNeeded:'fast', distance:'步行約3分鐘',
+          dietaryTags:[], scene:['casual'],
+          dishes:[{name:'三文魚腹壽司',note:'入口即化'},{name:'鰻魚壽司',note:'醬汁香甜'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E5%85%83%E6%B0%A3%E5%A3%BD%E5%8F%B8&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E5%85%83%E6%B0%A3%E5%A3%BD%E5%8F%B8',maps:'https://www.google.com/maps/search/%E5%85%83%E6%B0%A3%E5%A3%BD%E5%8F%B8+Causeway+Bay'}},
+        { id:'ichiran', name:'一蘭拉麵', emoji:'🍜', category:'japanese',
+          flavor:'heavy', groupSize:[1,2], budget:1, timeNeeded:'normal', distance:'步行約5分鐘',
+          dietaryTags:['no-seafood'], scene:['casual'],
+          dishes:[{name:'天然豚骨拉麵',note:'濃厚豚骨湯底'},{name:'追加半熟蛋',note:'必加配料'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E4%B8%80%E8%98%AD&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E4%B8%80%E8%98%AD%E6%8B%89%E9%BA%B5',maps:'https://www.google.com/maps/search/%E4%B8%80%E8%98%AD%E6%8B%89%E9%BA%B5+Causeway+Bay'}},
+        { id:'dondonya', name:'丼丼屋', emoji:'🍱', category:'japanese',
+          flavor:'neutral', groupSize:[1,2], budget:1, timeNeeded:'fast', distance:'步行約3分鐘',
+          dietaryTags:[], scene:['casual'],
+          dishes:[{name:'鰻魚丼',note:'醬汁濃郁'},{name:'吉列豬排丼',note:'炸至金黃酥脆'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E4%B8%BC%E4%B8%BC%E5%B1%8B&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E4%B8%BC%E4%B8%BC%E5%B1%8B',maps:'https://www.google.com/maps/search/%E4%B8%BC%E4%B8%BC%E5%B1%8B+Causeway+Bay'}},
+
+        // === 快餐 ===
+        { id:'mcdonalds-hk', name:'麥當勞', emoji:'🍔', category:'fast-food',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約2分鐘',
+          dietaryTags:['no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'Big Mac 套餐',note:'經典之選'},{name:'麥炸雞',note:'限時供應'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E9%BA%A5%E7%95%B6%E5%8B%9E&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E9%BA%A5%E7%95%B6%E5%8B%9E',maps:'https://www.google.com/maps/search/McDonalds+Causeway+Bay'}},
+        { id:'fairwood', name:'大快活', emoji:'🍛', category:'fast-food',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約3分鐘',
+          dietaryTags:[], scene:['casual'],
+          dishes:[{name:'葡國雞飯',note:'招牌推薦'},{name:'沙嗲牛肉麵',note:'港式經典'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E5%A4%A7%E5%BF%AB%E6%B4%BB&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E5%A4%A7%E5%BF%AB%E6%B4%BB',maps:'https://www.google.com/maps/search/%E5%A4%A7%E5%BF%AB%E6%B4%BB+Causeway+Bay'}},
+        { id:'cafe-de-coral', name:'大家樂', emoji:'🍚', category:'fast-food',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約2分鐘',
+          dietaryTags:[], scene:['casual'],
+          dishes:[{name:'燒味雙拼飯',note:'分量十足'},{name:'豬扒飯',note:'經典港式'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E5%A4%A7%E5%AE%B6%E6%A8%82&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E5%A4%A7%E5%AE%B6%E6%A8%82',maps:'https://www.google.com/maps/search/%E5%A4%A7%E5%AE%B6%E6%A8%82+Causeway+Bay'}},
+        { id:'yoshinoya-hk', name:'吉野家', emoji:'🥩', category:'fast-food',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約4分鐘',
+          dietaryTags:['no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'牛丼',note:'秘製醬汁'},{name:'燒雞丼',note:'香甜入味'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E5%90%89%E9%87%8E%E5%AE%B6&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E5%90%89%E9%87%8E%E5%AE%B6',maps:'https://www.google.com/maps/search/%E5%90%89%E9%87%8E%E5%AE%B6+Causeway+Bay'}},
+
+        // === 西餐 ===
+        { id:'shake-shack', name:'Shake Shack', emoji:'🍔', category:'western',
+          flavor:'neutral', groupSize:[1,2,3], budget:1, timeNeeded:'normal', distance:'步行約2分鐘',
+          dietaryTags:['no-spicy','no-seafood'], scene:['casual','date'],
+          dishes:[{name:'ShackBurger',note:'招牌漢堡'},{name:'Cheese Fries',note:'芝士薯條'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=Shake+Shack&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=Shake+Shack',maps:'https://www.google.com/maps/search/Shake+Shack+Causeway+Bay'}},
+        { id:'pizza-express', name:'PizzaExpress', emoji:'🍕', category:'western',
+          flavor:'neutral', groupSize:[2,3,4], budget:1, timeNeeded:'normal', distance:'步行約3分鐘',
+          dietaryTags:['has-veggie'], scene:['casual','date','team'],
+          dishes:[{name:'American Hot',note:'經典辣肉腸'},{name:'Padana',note:'羊酪沙律'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=PizzaExpress&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=PizzaExpress',maps:'https://www.google.com/maps/search/PizzaExpress+Causeway+Bay'}},
+        { id:'the-coffee-academics', name:'The Coffee Academics', emoji:'☕', category:'western',
+          flavor:'light', groupSize:[1,2], budget:1, timeNeeded:'normal', distance:'步行約2分鐘',
+          dietaryTags:['has-veggie','no-spicy'], scene:['casual','date'],
+          dishes:[{name:'Eggs Benedict',note:'早午餐之選'},{name:'Flat White',note:'咖啡必飲'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=Coffee+Academics&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=Coffee+Academics',maps:'https://www.google.com/maps/search/The+Coffee+Academics+Causeway+Bay'}},
+
+        // === 韓國菜 ===
+        { id:'seoul-brothers', name:'首爾兄弟', emoji:'🥩', category:'korean',
+          flavor:'heavy', groupSize:[2,3,4], budget:2, timeNeeded:'slow', distance:'步行約7分鐘',
+          dietaryTags:[], scene:['date','treat','team'],
+          dishes:[{name:'韓式烤五花肉',note:'包生菜食'},{name:'部隊鍋',note:'夠辣夠味'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E9%9F%93%E5%BC%8F%E7%87%92%E8%82%89&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E9%9F%93%E5%BC%8F%E7%87%92%E8%82%89',maps:'https://www.google.com/maps/search/Korean+BBQ+Causeway+Bay'}},
+        { id:'bibimbap-hk', name:'本粥韓式料理', emoji:'🍲', category:'korean',
+          flavor:'neutral', groupSize:[1,2,3], budget:1, timeNeeded:'normal', distance:'步行約5分鐘',
+          dietaryTags:[], scene:['casual','date'],
+          dishes:[{name:'石鍋拌飯',note:'焦香米飯'},{name:'泡菜豆腐湯',note:'暖胃之選'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E9%9F%93%E5%BC%8F%E6%96%99%E7%90%86&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E9%9F%93%E5%BC%8F%E6%96%99%E7%90%86',maps:'https://www.google.com/maps/search/Korean+restaurant+Causeway+Bay'}},
+
+        // === 東南亞 ===
+        { id:'thai-basil-hk', name:'金泰泰國菜', emoji:'🍛', category:'southeast-asian',
+          flavor:'heavy', groupSize:[2,3,4], budget:1, timeNeeded:'normal', distance:'步行約6分鐘',
+          dietaryTags:[], scene:['casual','team'],
+          dishes:[{name:'綠咖喱雞',note:'椰香濃郁'},{name:'泰式炒河粉',note:'酸甜開胃'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E6%B3%B0%E5%9C%8B%E8%8F%9C&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E6%B3%B0%E5%9C%8B%E8%8F%9C',maps:'https://www.google.com/maps/search/Thai+restaurant+Causeway+Bay'}},
+        { id:'pho-hk', name:'PHO 越南粉', emoji:'🍜', category:'southeast-asian',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行約5分鐘',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'越南牛肉粉',note:'湯底清甜'},{name:'越南春卷',note:'新鮮爽口'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=%E8%B6%8A%E5%8D%97%E7%B2%89&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=%E8%B6%8A%E5%8D%97%E7%B2%89',maps:'https://www.google.com/maps/search/Pho+Causeway+Bay'}},
+
+        // === 健康餐 ===
+        { id:'pret-hk', name:'Pret A Manger', emoji:'🥪', category:'healthy',
+          flavor:'light', groupSize:[1,2], budget:1, timeNeeded:'fast', distance:'步行約2分鐘',
+          dietaryTags:['has-veggie','no-spicy'], scene:['casual'],
+          dishes:[{name:'雞肉牛油果三文治',note:'新鮮製作'},{name:'超級沙律',note:'健康之選'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=Pret+A+Manger&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=Pret+A+Manger',maps:'https://www.google.com/maps/search/Pret+A+Manger+Causeway+Bay'}},
+        { id:'green-common', name:'Green Common', emoji:'🌱', category:'healthy',
+          flavor:'light', groupSize:[1,2], budget:1, timeNeeded:'normal', distance:'步行約4分鐘',
+          dietaryTags:['veggie','has-veggie','no-seafood'], scene:['casual','date'],
+          dishes:[{name:'OmniPork 漢堡',note:'植物肉'},{name:'素拉麵',note:'無蛋奶'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=Green+Common&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=Green+Common',maps:'https://www.google.com/maps/search/Green+Common+Causeway+Bay'}},
+        { id:'mana-hk', name:'Mana!', emoji:'🥗', category:'healthy',
+          flavor:'light', groupSize:[1,2], budget:1, timeNeeded:'fast', distance:'步行約5分鐘',
+          dietaryTags:['veggie','has-veggie','no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'Buddha Bowl',note:'營養均衡'},{name:'鷹嘴豆沙律',note:'蛋白質滿滿'}],
+          platforms:{openrice:'https://www.openrice.com/zh/hongkong/restaurants?what=Mana&where=%E9%8A%85%E9%91%BC%E7%81%A3',keeta:'https://www.keeta.com/zh-HK/search?q=Mana',maps:'https://www.google.com/maps/search/Mana+Causeway+Bay'}}
+      ],
+
+      'zh-CN': [
+        // === 杭帮菜 ===
+        { id:'waipo-jia', name:'外婆家', emoji:'🥡', category:'chinese',
+          flavor:'neutral', groupSize:[2,3,4], budget:1, timeNeeded:'normal', distance:'步行约5分钟',
+          dietaryTags:['no-spicy'], scene:['casual','treat','team'],
+          dishes:[{name:'茶香鸡',note:'招牌必点'},{name:'西湖醋鱼',note:'杭州经典'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%A4%96%E5%A9%86%E5%AE%B6+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%A4%96%E5%A9%86%E5%AE%B6',gaode:'https://uri.amap.com/search?keyword=%E5%A4%96%E5%A9%86%E5%AE%B6&center=120.130,30.270'}},
+        { id:'lvcha', name:'绿茶餐厅', emoji:'🍵', category:'chinese',
+          flavor:'neutral', groupSize:[2,3,4], budget:1, timeNeeded:'normal', distance:'步行约5分钟',
+          dietaryTags:[], scene:['casual','treat','team'],
+          dishes:[{name:'绿茶烤鸡',note:'必点招牌'},{name:'面包诱惑',note:'甜品界天花板'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E7%BB%BF%E8%8C%B6%E9%A4%90%E5%8E%85+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E7%BB%BF%E8%8C%B6%E9%A4%90%E5%8E%85',gaode:'https://uri.amap.com/search?keyword=%E7%BB%BF%E8%8C%B6%E9%A4%90%E5%8E%85&center=120.130,30.270'}},
+        { id:'xin-bai-lu', name:'新白鹿', emoji:'🦌', category:'chinese',
+          flavor:'neutral', groupSize:[2,3,4], budget:0, timeNeeded:'normal', distance:'步行约8分钟',
+          dietaryTags:['no-spicy'], scene:['casual','team'],
+          dishes:[{name:'糖醋里脊',note:'酸甜可口'},{name:'白鹿招牌鸡',note:'嫩滑入味'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E6%96%B0%E7%99%BD%E9%B9%BF+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E6%96%B0%E7%99%BD%E9%B9%BF',gaode:'https://uri.amap.com/search?keyword=%E6%96%B0%E7%99%BD%E9%B9%BF&center=120.130,30.270'}},
+        { id:'nong-tang-li', name:'弄堂里', emoji:'🏮', category:'chinese',
+          flavor:'neutral', groupSize:[2,3,4], budget:1, timeNeeded:'normal', distance:'步行约10分钟',
+          dietaryTags:[], scene:['casual','treat','team'],
+          dishes:[{name:'干锅牛蛙',note:'重口推荐'},{name:'葱油拌面',note:'简单美味'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%BC%84%E5%A0%82%E9%87%8C+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%BC%84%E5%A0%82%E9%87%8C',gaode:'https://uri.amap.com/search?keyword=%E5%BC%84%E5%A0%82%E9%87%8C&center=120.130,30.270'}},
+
+        // === 面馆 ===
+        { id:'hui-juan', name:'慧娟面馆', emoji:'🍜', category:'noodles',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约6分钟',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'片儿川',note:'杭州名面'},{name:'爆鳝面',note:'鳝鱼鲜嫩'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E6%85%A7%E5%A8%9F%E9%9D%A2%E9%A6%86+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E6%85%A7%E5%A8%9F%E9%9D%A2%E9%A6%86',gaode:'https://uri.amap.com/search?keyword=%E6%85%A7%E5%A8%9F%E9%9D%A2%E9%A6%86&center=120.130,30.270'}},
+        { id:'su-mian-fang', name:'苏面坊', emoji:'🥢', category:'noodles',
+          flavor:'neutral', groupSize:[1,2], budget:1, timeNeeded:'fast', distance:'步行约7分钟',
+          dietaryTags:[], scene:['casual'],
+          dishes:[{name:'秃黄油面',note:'蟹膏浓香'},{name:'蟹粉虾仁面',note:'鲜上加鲜'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E8%8B%8F%E9%9D%A2%E5%9D%8A+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E8%8B%8F%E9%9D%A2%E5%9D%8A',gaode:'https://uri.amap.com/search?keyword=%E8%8B%8F%E9%9D%A2%E5%9D%8A&center=120.130,30.270'}},
+        { id:'xiang-yuan', name:'相缘面馆', emoji:'🍝', category:'noodles',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约8分钟',
+          dietaryTags:[], scene:['casual'],
+          dishes:[{name:'大排面',note:'大块排骨'},{name:'酸菜牛腩面',note:'酸爽开胃'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E7%9B%B8%E7%BC%98%E9%9D%A2%E9%A6%86+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E7%9B%B8%E7%BC%98%E9%9D%A2%E9%A6%86',gaode:'https://uri.amap.com/search?keyword=%E7%9B%B8%E7%BC%98%E9%9D%A2%E9%A6%86&center=120.130,30.270'}},
+        { id:'xinfeng', name:'新丰小吃', emoji:'🥟', category:'noodles',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约5分钟',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'虾肉小笼',note:'皮薄馅大'},{name:'大肉包',note:'经典老味道'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E6%96%B0%E4%B8%B0%E5%B0%8F%E5%90%83+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E6%96%B0%E4%B8%B0%E5%B0%8F%E5%90%83',gaode:'https://uri.amap.com/search?keyword=%E6%96%B0%E4%B8%B0%E5%B0%8F%E5%90%83&center=120.130,30.270'}},
+
+        // === 日料 ===
+        { id:'zhu-li-xu', name:'竹里·栩', emoji:'🍣', category:'japanese',
+          flavor:'light', groupSize:[2,3], budget:2, timeNeeded:'normal', distance:'步行约6分钟',
+          dietaryTags:[], scene:['date','treat'],
+          dishes:[{name:'刺身拼盘',note:'新鲜直送'},{name:'寿司套餐',note:'师傅手握'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E7%AB%B9%E9%87%8C%E6%A0%A9+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E7%AB%B9%E9%87%8C%E6%A0%A9',gaode:'https://uri.amap.com/search?keyword=%E7%AB%B9%E9%87%8C%E6%A0%A9&center=120.130,30.270'}},
+        { id:'he-yi', name:'和一料理', emoji:'🍱', category:'japanese',
+          flavor:'neutral', groupSize:[1,2,3], budget:1, timeNeeded:'normal', distance:'步行约7分钟',
+          dietaryTags:[], scene:['casual','date'],
+          dishes:[{name:'豚骨拉面',note:'浓厚汤底'},{name:'鳗鱼饭',note:'酱汁甜香'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%92%8C%E4%B8%80%E6%96%99%E7%90%86+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%92%8C%E4%B8%80%E6%96%99%E7%90%86',gaode:'https://uri.amap.com/search?keyword=%E5%92%8C%E4%B8%80%E6%96%99%E7%90%86&center=120.130,30.270'}},
+        { id:'cun-shang', name:'村上一屋', emoji:'🍜', category:'japanese',
+          flavor:'neutral', groupSize:[1,2], budget:1, timeNeeded:'fast', distance:'步行约8分钟',
+          dietaryTags:[], scene:['casual'],
+          dishes:[{name:'味噌拉面',note:'浓郁味噌'},{name:'天妇罗定食',note:'酥脆可口'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E6%9D%91%E4%B8%8A%E4%B8%80%E5%B1%8B+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E6%9D%91%E4%B8%8A%E4%B8%80%E5%B1%8B',gaode:'https://uri.amap.com/search?keyword=%E6%9D%91%E4%B8%8A%E4%B8%80%E5%B1%8B&center=120.130,30.270'}},
+
+        // === 快餐 ===
+        { id:'mcdonalds-cn', name:'麦当劳', emoji:'🍔', category:'fast-food',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约3分钟',
+          dietaryTags:['no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'巨无霸套餐',note:'经典之选'},{name:'麦辣鸡腿堡',note:'辣味爱好者'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E9%BA%A6%E5%BD%93%E5%8A%B3+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E9%BA%A6%E5%BD%93%E5%8A%B3',gaode:'https://uri.amap.com/search?keyword=%E9%BA%A6%E5%BD%93%E5%8A%B3&center=120.130,30.270'}},
+        { id:'kfc-cn', name:'肯德基', emoji:'🍗', category:'fast-food',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约4分钟',
+          dietaryTags:['no-seafood'], scene:['casual'],
+          dishes:[{name:'吮指原味鸡',note:'经典不变'},{name:'老北京鸡肉卷',note:'方便快捷'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E8%82%AF%E5%BE%B7%E5%9F%BA+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E8%82%AF%E5%BE%B7%E5%9F%BA',gaode:'https://uri.amap.com/search?keyword=%E8%82%AF%E5%BE%B7%E5%9F%BA&center=120.130,30.270'}},
+        { id:'lao-xiang-ji', name:'老乡鸡', emoji:'🐔', category:'fast-food',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约5分钟',
+          dietaryTags:['no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'老母鸡汤套餐',note:'暖胃养生'},{name:'梅菜扣肉饭',note:'咸香下饭'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E8%80%81%E4%B9%A1%E9%B8%A1+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E8%80%81%E4%B9%A1%E9%B8%A1',gaode:'https://uri.amap.com/search?keyword=%E8%80%81%E4%B9%A1%E9%B8%A1&center=120.130,30.270'}},
+        { id:'yoshinoya-cn', name:'吉野家', emoji:'🥩', category:'fast-food',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约6分钟',
+          dietaryTags:['no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'牛肉饭',note:'日式经典'},{name:'鸡排饭',note:'香脆多汁'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%90%89%E9%87%8E%E5%AE%B6+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%90%89%E9%87%8E%E5%AE%B6',gaode:'https://uri.amap.com/search?keyword=%E5%90%89%E9%87%8E%E5%AE%B6&center=120.130,30.270'}},
+
+        // === 火锅 ===
+        { id:'chuan-lu', name:'川炉火锅', emoji:'🍲', category:'hotpot',
+          flavor:'heavy', groupSize:[2,3,4], budget:2, timeNeeded:'slow', distance:'步行约8分钟',
+          dietaryTags:[], scene:['team','treat'],
+          dishes:[{name:'麻辣牛油锅',note:'重辣推荐'},{name:'鸳鸯锅',note:'一辣一清'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%B7%9D%E7%82%89+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%B7%9D%E7%82%89',gaode:'https://uri.amap.com/search?keyword=%E5%B7%9D%E7%82%89%E7%81%AB%E9%94%85&center=120.130,30.270'}},
+        { id:'yu-niu-dao', name:'御牛道', emoji:'🥩', category:'hotpot',
+          flavor:'light', groupSize:[2,3,4], budget:2, timeNeeded:'slow', distance:'步行约10分钟',
+          dietaryTags:['no-spicy'], scene:['date','treat','team'],
+          dishes:[{name:'潮汕牛肉锅',note:'鲜切牛肉'},{name:'手切鲜牛肉',note:'入锅8秒即食'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%BE%A1%E7%89%9B%E9%81%93+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%BE%A1%E7%89%9B%E9%81%93',gaode:'https://uri.amap.com/search?keyword=%E5%BE%A1%E7%89%9B%E9%81%93&center=120.130,30.270'}},
+        { id:'haidilao', name:'海底捞', emoji:'🫕', category:'hotpot',
+          flavor:'heavy', groupSize:[2,3,4], budget:2, timeNeeded:'slow', distance:'步行约12分钟',
+          dietaryTags:[], scene:['team','treat'],
+          dishes:[{name:'番茄牛腩锅底',note:'不辣也好吃'},{name:'捞面表演',note:'看表演吃面'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E6%B5%B7%E5%BA%95%E6%8D%9E+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E6%B5%B7%E5%BA%95%E6%8D%9E',gaode:'https://uri.amap.com/search?keyword=%E6%B5%B7%E5%BA%95%E6%8D%9E&center=120.130,30.270'}},
+
+        // === 海鲜 ===
+        { id:'hl-seafood', name:'黄龙海鲜大排档', emoji:'🦐', category:'seafood',
+          flavor:'heavy', groupSize:[3,4], budget:2, timeNeeded:'normal', distance:'步行约7分钟',
+          dietaryTags:[], scene:['team','treat'],
+          dishes:[{name:'椒盐皮皮虾',note:'壳脆肉嫩'},{name:'清蒸大闸蟹',note:'时令鲜味'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E9%BB%84%E9%BE%99%E6%B5%B7%E9%B2%9C',meituan:'https://hz.meituan.com/s/%E9%BB%84%E9%BE%99%E6%B5%B7%E9%B2%9C',gaode:'https://uri.amap.com/search?keyword=%E9%BB%84%E9%BE%99%E6%B5%B7%E9%B2%9C%E5%A4%A7%E6%8E%92%E6%A1%A3&center=120.130,30.270'}},
+        { id:'yu-gu-lu', name:'玉古路海鲜', emoji:'🐟', category:'seafood',
+          flavor:'neutral', groupSize:[2,3,4], budget:2, timeNeeded:'normal', distance:'步行约9分钟',
+          dietaryTags:[], scene:['treat','team'],
+          dishes:[{name:'白灼基围虾',note:'鲜甜弹牙'},{name:'葱油梭子蟹',note:'葱香四溢'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E7%8E%89%E5%8F%A4%E8%B7%AF%E6%B5%B7%E9%B2%9C',meituan:'https://hz.meituan.com/s/%E7%8E%89%E5%8F%A4%E8%B7%AF%E6%B5%B7%E9%B2%9C',gaode:'https://uri.amap.com/search?keyword=%E7%8E%89%E5%8F%A4%E8%B7%AF%E6%B5%B7%E9%B2%9C&center=120.130,30.270'}},
+
+        // === 东南亚 ===
+        { id:'nan-yang', name:'南洋往事', emoji:'🍛', category:'southeast-asian',
+          flavor:'heavy', groupSize:[1,2,3], budget:1, timeNeeded:'normal', distance:'步行约6分钟',
+          dietaryTags:[], scene:['casual','date'],
+          dishes:[{name:'海南鸡饭',note:'嫩滑鸡肉'},{name:'叻沙',note:'椰香浓郁'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%8D%97%E6%B4%8B%E5%BE%80%E4%BA%8B+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%8D%97%E6%B4%8B%E5%BE%80%E4%BA%8B',gaode:'https://uri.amap.com/search?keyword=%E5%8D%97%E6%B4%8B%E5%BE%80%E4%BA%8B&center=120.130,30.270'}},
+
+        // === 小吃轻食 ===
+        { id:'zhu-fan-lao', name:'煮饭佬K-Lab', emoji:'🍚', category:'snacks',
+          flavor:'neutral', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约4分钟',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'腊味煲仔饭',note:'锅巴香脆'},{name:'窝蛋牛肉煲仔饭',note:'嫩滑牛肉'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E7%85%AE%E9%A5%AD%E4%BD%AC+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E7%85%AE%E9%A5%AD%E4%BD%AC',gaode:'https://uri.amap.com/search?keyword=%E7%85%AE%E9%A5%AD%E4%BD%ACK-Lab&center=120.130,30.270'}},
+        { id:'zhiweiguan', name:'知味观', emoji:'🥟', category:'snacks',
+          flavor:'light', groupSize:[1,2,3], budget:0, timeNeeded:'fast', distance:'步行约8分钟',
+          dietaryTags:['no-spicy'], scene:['casual'],
+          dishes:[{name:'猫耳朵',note:'杭州老字号'},{name:'小笼包',note:'汤汁饱满'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E7%9F%A5%E5%91%B3%E8%A7%82+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E7%9F%A5%E5%91%B3%E8%A7%82',gaode:'https://uri.amap.com/search?keyword=%E7%9F%A5%E5%91%B3%E8%A7%82&center=120.130,30.270'}},
+        { id:'nayuki', name:'奈雪的茶', emoji:'🧋', category:'snacks',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约3分钟',
+          dietaryTags:['veggie','has-veggie','no-spicy','no-seafood'], scene:['casual','date'],
+          dishes:[{name:'霸气芝士草莓',note:'颜值担当'},{name:'软欧包',note:'搭配奶茶'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E5%A5%88%E9%9B%AA%E7%9A%84%E8%8C%B6+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E5%A5%88%E9%9B%AA%E7%9A%84%E8%8C%B6',gaode:'https://uri.amap.com/search?keyword=%E5%A5%88%E9%9B%AA%E7%9A%84%E8%8C%B6&center=120.130,30.270'}},
+        { id:'yidian', name:'一点点', emoji:'🥤', category:'snacks',
+          flavor:'light', groupSize:[1,2], budget:0, timeNeeded:'fast', distance:'步行约3分钟',
+          dietaryTags:['veggie','has-veggie','no-spicy','no-seafood'], scene:['casual'],
+          dishes:[{name:'波霸奶茶',note:'经典必喝'},{name:'四季春茶',note:'清爽回甘'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_%E4%B8%80%E7%82%B9%E7%82%B9+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/%E4%B8%80%E7%82%B9%E7%82%B9',gaode:'https://uri.amap.com/search?keyword=%E4%B8%80%E7%82%B9%E7%82%B9&center=120.130,30.270'}},
+        { id:'wades', name:"WADE'S 韦德", emoji:'🥩', category:'snacks',
+          flavor:'neutral', groupSize:[1,2,3], budget:2, timeNeeded:'normal', distance:'步行约5分钟',
+          dietaryTags:['no-spicy'], scene:['date','treat'],
+          dishes:[{name:'安格斯牛排',note:'炭烤多汁'},{name:'经典汉堡',note:'厚实牛肉饼'}],
+          platforms:{dianping:'https://www.dianping.com/search/keyword/14/0_WADES+%E9%BB%84%E9%BE%99',meituan:'https://hz.meituan.com/s/WADES',gaode:'https://uri.amap.com/search?keyword=WADES+%E9%BB%84%E9%BE%99&center=120.130,30.270'}}
+      ]
+    };
+
+    // =============================================
+    // FIVE ELEMENTS + FORTUNES
     // =============================================
     const ELEMENTS = [
       { id:'fire', emoji:'🔥',
-        name:{'zh-HK':'火','zh-CN':'火',en:'Fire',ja:'火',ko:'화(火)',fr:'Feu'},
-        categories:['thai','korean','indian'],
+        name:{'zh-HK':'火','zh-CN':'火'},
+        categories:['hotpot','korean','southeast-asian'],
         messages:{
           'zh-HK':['今日五行缺火，需要辣嘢刺激味蕾！🌶️','火星逆行中，用一碗辣湯化解！🔥','火行人今日能量爆棚！食辣嘢釋放熱情！💥','命格帶火，辛辣食物幫你開運！🌟'],
-          'zh-CN':['今天五行缺火，去曙光路来顿川炉火锅！🌶️','黄龙人今天适合吃辣！东南亚菜或火锅走起！🔥','火行当旺，午饭来份南洋往事的叻沙！💥','西湖边的风吹不走你的火气，不如吃辣发泄！🌟'],
-          en:['The stars say you need fire today — go spicy! 🌶️','Mercury in retrograde? A fiery meal will fix everything! 🔥','Your fire energy is off the charts — match it with bold flavors! 💥','Today\'s horoscope: spice is your lucky charm! 🌟'],
-          ja:['大吉🎋 今日の昼食運は辛い物が吉！スパイシーで開運！','御神籤曰く：火の気が不足！激辛料理で運気アップ！🔥','今日のおみくじ：辛口料理で午後の仕事運UP！💥','火の五行パワー全開！辛い物でエネルギーチャージ！🌟'],
-          ko:['오늘의 사주: 화(火)의 기운이 필요합니다! 매운 음식으로 운을 올리세요! 🌶️','사주풀이: 화기가 부족한 날! 매운탕으로 보충하세요! 🔥','오늘의 점괘: 매운 음식이 행운을 부릅니다! 💥','화(火)의 기운 충만! 불맛으로 오후를 이겨내세요! 🌟'],
-          fr:['Votre horoscope culinaire : l\'élément Feu domine — optez pour des saveurs épicées ! 🌶️','Les astres recommandent un déjeuner flamboyant et épicé ! 🔥','Énergie de Feu maximale — libérez-la avec un curry bien relevé ! 💥','Aujourd\'hui, le piment est votre porte-bonheur ! 🌟']
+          'zh-CN':['今天五行缺火，来顿火锅或东南亚菜！🌶️','火行当旺，适合吃辣！🔥','火行能量爆棚，来份辣的释放热情！💥','五行缺火，辛辣食物帮你开运！🌟']
         }
       },
       { id:'water', emoji:'💧',
-        name:{'zh-HK':'水','zh-CN':'水',en:'Water',ja:'水',ko:'수(水)',fr:'Eau'},
-        categories:['vietnamese','congee-noodles','japanese'],
+        name:{'zh-HK':'水','zh-CN':'水'},
+        categories:['noodles','japanese'],
         messages:{
           'zh-HK':['水行當旺，飲湯食粉最啱！🍜','今日適合食滋潤嘢，湯湯水水補返！💧','水氣充盈，一碗拉麵或河粉最配！🌊','命帶水運，滋潤嘅嘢食幫你順風順水！🐟'],
-          'zh-CN':['水行当旺，去苏面坊来碗秃黄油面！🍜','今天适合吃汤面，慧娟面馆的片儿川安排上！💧','水气充盈，和一料理的拉面或相缘的牛腩面都不错！🌊','西湖水润万物，今天喝汤吃面最养生！🐟'],
-          en:['The stars align for soup today — warm and nourishing! 🍜','Your Water energy flows strong — go for noodles or broth! 💧','Today\'s cosmic vibe: comfort in a bowl of ramen or pho! 🌊','A soupy lunch will carry you through the afternoon! 🐟'],
-          ja:['大吉🎋 水の気が満ちています！温かい麺類が吉！🍜','御神籤曰く：スープ系料理で運気上昇！💧','今日のおみくじ：ラーメンやフォーで心も体も潤す日！🌊','水の五行パワー発動！汁物で午後の運気アップ！🐟'],
-          ko:['오늘의 사주: 수(水)의 기운이 가득! 국물 요리가 딱! 🍜','사주풀이: 물기운 보충 필요! 뜨끈한 국수로 채우세요! 💧','오늘의 점괘: 라멘이나 쌀국수가 행운의 음식! 🌊','수(水) 기운과 함께! 따뜻한 국물로 오후를 달래세요! 🐟'],
-          fr:['Les astres recommandent un bon bouillon aujourd\'hui ! 🍜','Votre énergie d\'Eau est puissante — optez pour des nouilles ! 💧','Vibration cosmique du jour : réconfort dans un bol de ramen ! 🌊','Un déjeuner en soupe vous portera tout l\'après-midi ! 🐟']
+          'zh-CN':['水行当旺，来碗汤面最合适！🍜','今天适合吃汤汤水水，滋润养生！💧','水气充盈，一碗拉面或汤粉最配！🌊','水行人今天顺风顺水，来碗好面！🐟']
         }
       },
       { id:'wood', emoji:'🌿',
-        name:{'zh-HK':'木','zh-CN':'木',en:'Wood',ja:'木',ko:'목(木)',fr:'Bois'},
-        categories:['salad-healthy','vietnamese'],
+        name:{'zh-HK':'木','zh-CN':'木'},
+        categories:['healthy','snacks'],
         messages:{
-          'zh-HK':['木行需要生機！食啲綠色蔬菜充電！🥗','今日木氣不足，沙律或越南嘢幫到你！🌱','木行人需要大自然嘅力量！食清淡嘢充電！🌳','春意盎然嘅一日！清新食物帶畀你好運！🍃'],
-          'zh-CN':['木行需要生机！来份轻食简餐充充电！🥗','黄龙人今天适合吃清淡的，沙拉走起！🌱','植物园就在旁边，今天跟着木行吃绿色！🌳','春风拂过曙光路，清新轻食带来好运！🍃'],
-          en:['Your Wood energy craves greenery — salad day! 🥗','The planets say: fresh and light is the way to go! 🌱','Channel nature\'s power with a vibrant, healthy lunch! 🌳','A fresh start on your plate brings fresh luck today! 🍃'],
-          ja:['大吉🎋 木の気が不足！グリーンサラダで開運！🥗','御神籤曰く：新鮮な野菜でエネルギーチャージ！🌱','今日のおみくじ：ヘルシーランチで午後の運気UP！🌳','木の五行パワー！フレッシュな食事で新しい風を！🍃'],
-          ko:['오늘의 사주: 목(木)의 기운 필요! 신선한 샐러드가 답! 🥗','사주풀이: 푸른 기운 보충! 건강식으로 에너지 충전! 🌱','오늘의 점괘: 가벼운 식사가 행운을 부릅니다! 🌳','목(木) 기운과 함께! 신선한 음식으로 리프레시! 🍃'],
-          fr:['L\'énergie du Bois demande de la verdure — salade en vue ! 🥗','Les planètes disent : frais et léger, c\'est la voie ! 🌱','Canalisez la nature avec un déjeuner frais et vitaminé ! 🌳','Un repas frais apporte une chance fraîche aujourd\'hui ! 🍃']
+          'zh-HK':['木行需要生機！食啲綠色蔬菜充電！🥗','今日木氣不足，沙律或清淡嘢幫到你！🌱','木行人需要大自然嘅力量！食清淡嘢充電！🌳','春意盎然嘅一日！清新食物帶畀你好運！🍃'],
+          'zh-CN':['木行需要生机！来份轻食充充电！🥗','今天适合吃清淡的，沙拉走起！🌱','木行人需要绿色力量！清新轻食带来好运！🌳','春风拂面，清新轻食带来好运！🍃']
         }
       },
       { id:'metal', emoji:'⚡',
-        name:{'zh-HK':'金','zh-CN':'金',en:'Metal',ja:'金',ko:'금(金)',fr:'Métal'},
-        categories:['fast-food','western','korean'],
+        name:{'zh-HK':'金','zh-CN':'金'},
+        categories:['fast-food','western','seafood'],
         messages:{
           'zh-HK':['金行氣場強！食脆口嘢增強運勢！🍗','今日金運旺，炸雞薯條係幸運食物！⚡','金光閃閃嘅一日！食啲香脆嘢慶祝！✨','金行主決斷！食完脆嘢做嘢特別有效率！💪'],
-          'zh-CN':['金行气场强！下楼去麦当劳来个巨无霸！🍗','今天金运旺，WADE\'S的汉堡或炸鸡是幸运食物！⚡','金光闪闪的一天！黄龙海鲜大排档犒劳自己！✨','金行主决断！快餐解决午饭，下午高效冲！💪'],
-          en:['Your Metal energy is golden — treat yourself to something crispy! 🍗','The stars favor bold, crunchy flavors today! ⚡','A golden day calls for golden fries and crispy bites! ✨','Metal energy boosts productivity — fuel up with hearty comfort food! 💪'],
-          ja:['大吉🎋 金の気が充実！サクサク料理で開運！🍗','御神籤曰く：揚げ物で金運アップ！⚡','今日のおみくじ：カリカリ食感が幸運を呼ぶ！✨','金の五行パワー！ガッツリ食べて午後も頑張ろう！💪'],
-          ko:['오늘의 사주: 금(金)의 기운 충만! 바삭한 음식이 행운! 🍗','사주풀이: 금 기운 상승! 치킨으로 운을 높이세요! ⚡','오늘의 점괘: 바삭바삭한 음식이 행운의 열쇠! ✨','금(金) 기운 폭발! 든든하게 먹고 오후도 화이팅! 💪'],
-          fr:['Votre énergie Métal est dorée — offrez-vous du croustillant ! 🍗','Les astres favorisent les saveurs croquantes aujourd\'hui ! ⚡','Journée dorée : frites et poulet croustillant au menu ! ✨','L\'énergie Métal booste la productivité — un bon burger s\'impose ! 💪']
+          'zh-CN':['金行气场强！来份炸鸡或汉堡增强运势！🍗','今天金运旺，快餐是幸运食物！⚡','金光闪闪的一天！犒劳自己吃顿好的！✨','金行主决断！快餐解决午饭，下午高效冲！💪']
         }
       },
       { id:'earth', emoji:'🌍',
-        name:{'zh-HK':'土','zh-CN':'土',en:'Earth',ja:'土',ko:'토(土)',fr:'Terre'},
-        categories:['chinese','taiwanese','congee-noodles'],
+        name:{'zh-HK':'土','zh-CN':'土'},
+        categories:['chinese'],
         messages:{
           'zh-HK':['土行穩陣！一碗白飯配餸最實際！🍚','今日需要紮實嘅能量，食飽飽打好基礎！💪','土行人要接地氣！傳統中式飯餸最啱！🏮','穩如泰山嘅一日！comfort food穩定軍心！🍲'],
-          'zh-CN':['土行稳当！去K-Lab的外婆家来碗茶香鸡！🍚','今天需要扎实能量，煮饭佬的煲仔饭安排上！💪','土行人要接地气！新丰小笼或知味观猫耳朵最配！🏮','稳如黄龙山！来份绿茶烤鸡定定心！🍲'],
-          en:['Earth energy grounds you — go classic with rice and sides! 🍚','You need solid fuel today — hearty and filling is the way! 💪','Stay grounded with traditional comfort food! 🏮','A stable day calls for a stable, satisfying meal! 🍲'],
-          ja:['大吉🎋 土の気でしっかり！ご飯物が吉！🍚','御神籤曰く：がっつり定食で地に足つけて！💪','今日のおみくじ：伝統料理でパワーチャージ！🏮','土の五行パワー！安定のご飯で午後も安泰！🍲'],
-          ko:['오늘의 사주: 토(土)의 기운! 든든한 밥이 최고! 🍚','사주풀이: 토 기운 보충! 푸짐한 한 끼로 기반을 다지세요! 💪','오늘의 점괘: 전통 음식이 행운을 가져옵니다! 🏮','토(土) 기운으로 안정! 편안한 한 끼가 오후를 지켜줍니다! 🍲'],
-          fr:['L\'énergie Terre vous ancre — classique avec riz et accompagnements ! 🍚','Vous avez besoin d\'énergie solide — copieux et nourrissant ! 💪','Restez ancré avec un bon plat traditionnel ! 🏮','Journée stable = repas satisfaisant et réconfortant ! 🍲']
+          'zh-CN':['土行稳当！来碗实在的饭菜！🍚','今天需要扎实能量，吃饱饱打好基础！💪','土行人要接地气！传统中餐最合适！🏮','稳如泰山的一天！来份家常菜定定心！🍲']
         }
       }
     ];
 
     const LUCKY_COLORS = [
-      {n:{'zh-HK':'紅色','zh-CN':'红色',en:'Red',ja:'赤',ko:'빨강',fr:'Rouge'}, emoji:'🔴'},
-      {n:{'zh-HK':'金色','zh-CN':'金色',en:'Gold',ja:'金',ko:'금색',fr:'Or'}, emoji:'🟡'},
-      {n:{'zh-HK':'綠色','zh-CN':'绿色',en:'Green',ja:'緑',ko:'초록',fr:'Vert'}, emoji:'🟢'},
-      {n:{'zh-HK':'藍色','zh-CN':'蓝色',en:'Blue',ja:'青',ko:'파랑',fr:'Bleu'}, emoji:'🔵'},
-      {n:{'zh-HK':'紫色','zh-CN':'紫色',en:'Purple',ja:'紫',ko:'보라',fr:'Violet'}, emoji:'🟣'},
-      {n:{'zh-HK':'橙色','zh-CN':'橙色',en:'Orange',ja:'橙',ko:'주황',fr:'Orange'}, emoji:'🟠'}
+      {n:{'zh-HK':'紅色','zh-CN':'红色'}, emoji:'🔴'},
+      {n:{'zh-HK':'金色','zh-CN':'金色'}, emoji:'🟡'},
+      {n:{'zh-HK':'綠色','zh-CN':'绿色'}, emoji:'🟢'},
+      {n:{'zh-HK':'藍色','zh-CN':'蓝色'}, emoji:'🔵'},
+      {n:{'zh-HK':'紫色','zh-CN':'紫色'}, emoji:'🟣'},
+      {n:{'zh-HK':'橙色','zh-CN':'橙色'}, emoji:'🟠'}
     ];
 
     const SPIN_MESSAGES = {
       'zh-HK':['問天問地問午餐... 🔮','五行推算中... ☯️','今日命格分析... 🌟','天機不可泄漏... 🤫','午餐塔羅牌翻緊... 🎴','神諭降臨中... ✨','算命師傅研究緊... 🔍','星象排列中... 🌙'],
-      'zh-CN':['问天问地问午餐... 🔮','五行推算中... ☯️','今日命格分析... 🌟','天机不可泄露... 🤫','午餐塔罗牌翻转中... 🎴','神谕降临中... ✨','算命师傅研究中... 🔍','星象排列中... 🌙'],
-      en:['Consulting the cosmos... 🔮','Aligning the stars... ☯️','Reading your food horoscope... 🌟','The universe is deciding... 🤫','Flipping your lunch tarot... 🎴','The oracle speaks... ✨','Channeling foodie energy... 🔍','Planets aligning... 🌙'],
-      ja:['おみくじを振っています... 🔮','五行を計算中... ☯️','今日の運勢を分析中... 🌟','天の声を聞いています... 🤫','ランチおみくじ抽選中... 🎴','神託降臨中... ✨','占い師が鑑定中... 🔍','星の配置を読み中... 🌙'],
-      ko:['점괘를 뽑는 중... 🔮','오행을 계산하는 중... ☯️','오늘의 운세 분석 중... 🌟','천기누설 불가... 🤫','점심 타로카드 뒤집는 중... 🎴','신탁이 내려오는 중... ✨','사주를 분석하는 중... 🔍','별자리 정렬 중... 🌙'],
-      fr:['Consultation des astres... 🔮','Alignement des éléments... ☯️','Lecture de votre horoscope... 🌟','L\'univers délibère... 🤫','Les cartes se révèlent... 🎴','L\'oracle se prononce... ✨','Canalisation d\'énergie... 🔍','Les planètes s\'alignent... 🌙']
+      'zh-CN':['问天问地问午餐... 🔮','五行推算中... ☯️','今日命格分析... 🌟','天机不可泄露... 🤫','午餐塔罗牌翻转中... 🎴','神谕降临中... ✨','算命师傅研究中... 🔍','星象排列中... 🌙']
     };
+
+    // =============================================
+    // USER PREFERENCES (state)
+    // =============================================
+    let prefs = JSON.parse(localStorage.getItem('lunchOraclePrefs') || 'null') || {
+      diners: null, flavor: null, budget: null, time: null, dietary: [], scene: null
+    };
+
+    function savePrefs() { localStorage.setItem('lunchOraclePrefs', JSON.stringify(prefs)); }
+
+    // =============================================
+    // HISTORY + EXCLUSIONS
+    // =============================================
+    function getHistory() { return JSON.parse(localStorage.getItem('lunchOracleHistory') || '[]'); }
+    function saveHistory(h) { localStorage.setItem('lunchOracleHistory', JSON.stringify(h)); }
+    function getExclusions() { return JSON.parse(localStorage.getItem('lunchOracleExclude') || '[]'); }
+    function saveExclusions(e) { localStorage.setItem('lunchOracleExclude', JSON.stringify(e)); }
+
+    function addToHistory(restaurant, dishName) {
+      const h = getHistory();
+      h.unshift({ id: restaurant.id, name: restaurant.name, emoji: restaurant.emoji, dish: dishName, date: new Date().toISOString().slice(0, 10) });
+      if (h.length > 30) h.length = 30;
+      saveHistory(h);
+    }
+
+    function getRecentHistoryIds(days) {
+      const h = getHistory();
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - days);
+      const cutoffStr = cutoff.toISOString().slice(0, 10);
+      return h.filter(x => x.date >= cutoffStr).map(x => x.id);
+    }
+
+    function toggleExclusion(id) {
+      const ex = getExclusions();
+      const idx = ex.indexOf(id);
+      if (idx >= 0) ex.splice(idx, 1);
+      else ex.push(id);
+      saveExclusions(ex);
+    }
+
+    // =============================================
+    // FILTERING ENGINE
+    // =============================================
+    function getFilteredPool() {
+      const db = RESTAURANT_DB[currentLang] || [];
+      let pool = [...db];
+      const ex = getExclusions();
+
+      // 1. Hard: exclusions
+      pool = pool.filter(r => !ex.includes(r.id));
+
+      // 2. Hard: dietary
+      if (prefs.dietary && prefs.dietary.length > 0) {
+        prefs.dietary.forEach(d => {
+          if (d === 'veggie') pool = pool.filter(r => r.dietaryTags.includes('veggie') || r.dietaryTags.includes('has-veggie'));
+          if (d === 'halal') pool = pool.filter(r => r.dietaryTags.includes('halal'));
+          if (d === 'no-spicy') pool = pool.filter(r => r.flavor !== 'heavy' || r.dietaryTags.includes('no-spicy'));
+          if (d === 'no-seafood') pool = pool.filter(r => r.dietaryTags.includes('no-seafood'));
+        });
+      }
+
+      // 3. Hard: group size
+      if (prefs.diners !== null) {
+        const filtered = pool.filter(r => r.groupSize.includes(prefs.diners));
+        if (filtered.length >= 2) pool = filtered;
+      }
+
+      // 4. Hard: budget
+      if (prefs.budget !== null) {
+        const filtered = pool.filter(r => r.budget <= prefs.budget);
+        if (filtered.length >= 2) pool = filtered;
+      }
+
+      // 5. Hard: time
+      if (prefs.time === 'fast') {
+        const filtered = pool.filter(r => r.timeNeeded === 'fast');
+        if (filtered.length >= 2) pool = filtered;
+      }
+
+      // 6. Soft: scene
+      if (prefs.scene && prefs.scene !== 'casual') {
+        const preferred = pool.filter(r => r.scene.includes(prefs.scene));
+        if (preferred.length >= 2) pool = preferred;
+      }
+
+      // 7. Soft: flavor
+      if (prefs.flavor) {
+        const preferred = pool.filter(r => r.flavor === prefs.flavor || r.flavor === 'neutral');
+        if (preferred.length >= 2) pool = preferred;
+      }
+
+      // 8. Soft: history (avoid last 5 days)
+      const recent = getRecentHistoryIds(5);
+      if (recent.length > 0) {
+        const nonRepeat = pool.filter(r => !recent.includes(r.id));
+        if (nonRepeat.length >= 2) pool = nonRepeat;
+      }
+
+      // 9. Wuxing bias (70%)
+      const fortune = getDailyFortune();
+      if (Math.random() < 0.7) {
+        const biased = pool.filter(r => fortune.element.categories.includes(r.category));
+        if (biased.length >= 1) pool = biased;
+      }
+
+      return pool;
+    }
 
     // =============================================
     // HELPERS
     // =============================================
-    function catName(cat) { return cat.name[currentLang] || cat.name.en; }
-    function catSub(cat) { return cat.sub[currentLang] || cat.sub.en; }
-    function dishName(dish) { return dish.n[currentLang] || dish.n.en; }
-    function dishSub(dish) {
-      // Show English as subtitle for CJK, show zh-HK for English/French
-      if (['zh-HK','zh-CN','ja','ko'].includes(currentLang)) return dish.n.en;
-      return dish.n['zh-HK'];
-    }
-    function elemName(el) { return el.name[currentLang] || el.name.en; }
-    function colorName(c) { return c.n[currentLang] || c.n.en; }
-    function getSpinMsgs() { return SPIN_MESSAGES[currentLang] || SPIN_MESSAGES.en; }
-
-    function buildPlatformUrl(dish, category) {
-      const dn = dishName(dish);
-      if (currentLang === 'zh-CN') {
-        const restaurant = dn.split('·')[0] || dn;
-        return 'https://www.dianping.com/search/keyword/14/0_' + encodeURIComponent(restaurant);
-      }
-      if (currentLang === 'zh-HK') {
-        const keyword = catName(category) + ' ' + dn;
-        return 'https://www.openrice.com/zh/hongkong/restaurants?what=' + encodeURIComponent(keyword) + '&where=%E9%8A%85%E9%91%BC%E7%81%A3';
-      }
-      const keyword = dn + ' ' + catName(category);
-      return 'https://www.google.com/maps/search/' + encodeURIComponent(keyword + ' Times Square Causeway Bay Hong Kong');
-    }
-    function getPlatformName() {
-      if (currentLang === 'zh-CN') return '大众点评';
-      if (currentLang === 'zh-HK') return 'OpenRice';
-      return 'Google Maps';
-    }
-    function getPlatformIcon() {
-      if (currentLang === 'zh-CN') return '📍';
-      if (currentLang === 'zh-HK') return '🍽️';
-      return '📍';
-    }
+    function elemName(el) { return el.name[currentLang] || ''; }
+    function colorName(c) { return c.n[currentLang] || ''; }
 
     function getDailySeed(date) {
       const d = date || new Date();
@@ -633,20 +1052,38 @@
       const seed = getDailySeed(now);
       const day = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
       const element = ELEMENTS[seed % 5];
-      const msgs = element.messages[currentLang] || element.messages.en;
+      const msgs = element.messages[currentLang] || element.messages['zh-HK'];
       const message = msgs[(seed * day) % msgs.length];
       const luckyColor = LUCKY_COLORS[(seed * 3 + day) % LUCKY_COLORS.length];
       const fortuneScore = (seed % 4) + 2;
       return { element, message, luckyColor, fortuneScore };
     }
 
+    function starsHTML(score) {
+      return Array.from({length:5}, (_,i) => i < score ? '<span class="star-filled">★</span>' : '<span class="star-empty">★</span>').join('');
+    }
+
+    function buildMatchText(restaurant) {
+      const parts = [];
+      if (prefs.diners) {
+        const labels = {1:'1人',2:'2人',3:'3-4人',4:'5人+'};
+        parts.push(labels[prefs.diners] + (currentLang === 'zh-HK' ? '用餐' : '用餐'));
+      }
+      if (prefs.flavor === 'heavy') parts.push(currentLang === 'zh-HK' ? '重口味' : '重口味');
+      if (prefs.flavor === 'light') parts.push(currentLang === 'zh-HK' ? '清淡' : '清淡');
+      if (prefs.scene === 'date') parts.push(currentLang === 'zh-HK' ? '約會之選' : '约会之选');
+      if (prefs.scene === 'treat') parts.push(currentLang === 'zh-HK' ? '請客首選' : '请客首选');
+      if (prefs.scene === 'team') parts.push(currentLang === 'zh-HK' ? '團建好去處' : '团建好去处');
+      if (parts.length === 0) return '';
+      return (currentLang === 'zh-HK' ? '適合' : '适合') + parts.join(' · ');
+    }
+
     // =============================================
     // STATE + DOM
     // =============================================
-    let selectedCategory = null;
     let currentResult = null;
     const $ = id => document.getElementById(id);
-    const screens = () => [$('screen-home'), $('screen-divine'), $('screen-result'), $('screen-dishes')];
+    const screens = () => [$('screen-home'), $('screen-divine'), $('screen-result'), $('screen-browse')];
 
     function showScreen(target) {
       screens().forEach(s => s.classList.remove('active'));
@@ -661,19 +1098,59 @@
       setTimeout(() => el.classList.remove('show'), 2000);
     }
 
-    function starsHTML(score) {
-      return Array.from({length:5}, (_,i) => i < score ? '<span class="star-filled">★</span>' : '<span class="star-empty">★</span>').join('');
+    // =============================================
+    // RENDER: LANGUAGE TOGGLE
+    // =============================================
+    function renderLangToggle() {
+      document.querySelectorAll('.lang-toggle .lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === currentLang);
+      });
     }
 
     // =============================================
-    // RENDER
+    // RENDER: PREFERENCE PANEL
     // =============================================
-    function renderLangBar() {
-      $('lang-bar').innerHTML = LANGUAGES.map(l =>
-        `<button class="lang-btn${l.code === currentLang ? ' active' : ''}" data-lang="${l.code}">${l.flag} ${l.label}</button>`
-      ).join('');
+    function renderPrefPills(containerId, optionsKey, currentValue, isMulti) {
+      const opts = PREF_OPTIONS[optionsKey][currentLang];
+      const container = $(containerId);
+      container.innerHTML = opts.map(o => {
+        let isActive;
+        if (isMulti) {
+          isActive = Array.isArray(currentValue) && currentValue.includes(o.v);
+        } else {
+          isActive = currentValue === o.v;
+        }
+        return `<button class="pref-pill${isActive ? ' active' : ''}" data-key="${optionsKey}" data-value="${o.v === null ? '__null__' : o.v}" data-multi="${isMulti}">${o.l}</button>`;
+      }).join('');
     }
 
+    function renderPrefs() {
+      $('pref-toggle-label').textContent = t('prefTitle');
+      $('pref-label-diners').textContent = t('prefDiners');
+      $('pref-label-flavor').textContent = t('prefFlavor');
+      $('pref-label-budget').textContent = t('prefBudget');
+      $('pref-label-time').textContent = t('prefTime');
+      $('pref-label-dietary').textContent = t('prefDietary');
+      $('pref-label-scene').textContent = t('prefScene');
+
+      renderPrefPills('pills-diners', 'diners', prefs.diners, false);
+      renderPrefPills('pills-flavor', 'flavor', prefs.flavor, false);
+      renderPrefPills('pills-budget', 'budget', prefs.budget, false);
+      renderPrefPills('pills-time', 'time', prefs.time, false);
+      renderPrefPills('pills-dietary', 'dietary', prefs.dietary, true);
+      renderPrefPills('pills-scene', 'scene', prefs.scene, false);
+
+      // Summary
+      const parts = [];
+      if (prefs.diners) parts.push(prefs.diners === 4 ? '5+人' : prefs.diners + '人');
+      if (prefs.flavor) parts.push(prefs.flavor === 'heavy' ? '🔥' : '🥬');
+      if (prefs.budget !== null) parts.push(BUDGET_LABELS[currentLang][prefs.budget]);
+      $('pref-summary').textContent = parts.length ? parts.join(' · ') : '';
+    }
+
+    // =============================================
+    // RENDER: HOME
+    // =============================================
     function renderHome() {
       const f = getDailyFortune();
       $('home-title').textContent = t('title');
@@ -683,111 +1160,199 @@
       $('section-divider').textContent = t('sectionDivider');
       $('btn-accept').textContent = t('btnAccept');
       $('btn-redraw').textContent = t('btnRedraw');
-      $('btn-find-restaurant').textContent = t('findRestaurant');
       $('btn-share').textContent = t('btnShare');
       $('btn-browse').textContent = t('btnBrowse');
       $('btn-back-home').textContent = t('btnBack');
-      $('dish-divider-text').textContent = t('dishDivider');
+      $('browse-title').textContent = t('browseTitle');
 
       $('fortune-banner').innerHTML = `
         <div class="element-row">
           <span class="element-emoji">${f.element.emoji}</span>
-          <span class="element-name">${t('todayElement')}${elemName(f.element)}</span>
+          <span class="element-name">${t('todayElement')}${elemName(f.element)}${t('elementSuffix')}</span>
         </div>
         <div class="fortune-text">${f.message}</div>
         <div class="fortune-stars">${starsHTML(f.fortuneScore)}</div>
         <div class="fortune-label">${t('lunchFortune')}</div>`;
 
-      $('category-grid').innerHTML = FOOD_DATA.map(cat => `
+      // Category grid
+      const cats = CATEGORIES[currentLang] || [];
+      $('category-grid').innerHTML = cats.map(cat => `
         <div class="category-card" data-id="${cat.id}">
           <span class="emoji">${cat.emoji}</span>
-          <span class="cat-name">${catName(cat)}</span>
-          <span class="cat-sub">${catSub(cat)}</span>
+          <span class="cat-name">${cat.name}</span>
+        </div>`).join('');
+
+      renderPrefs();
+      renderHistory();
+    }
+
+    // =============================================
+    // RENDER: HISTORY
+    // =============================================
+    function renderHistory() {
+      const h = getHistory().slice(0, 3);
+      const section = $('history-section');
+      if (h.length === 0) { section.style.display = 'none'; return; }
+      section.style.display = 'block';
+      $('history-label-text').textContent = t('historyLabel');
+      $('history-clear').textContent = t('historyClear');
+      const ex = getExclusions();
+      $('history-list').innerHTML = h.map(item => `
+        <div class="history-item">
+          <span class="h-emoji">${item.emoji}</span>
+          <div class="h-info">
+            <div class="h-name">${item.name}</div>
+            <div class="h-date">${item.date} · ${item.dish}</div>
+          </div>
+          <button class="h-exclude ${ex.includes(item.id) ? 'excluded' : ''}" data-id="${item.id}">
+            ${ex.includes(item.id) ? t('excluded') : t('exclude')}
+          </button>
         </div>`).join('');
     }
 
+    // =============================================
+    // RENDER: RESULT
+    // =============================================
     function renderResult() {
       if (!currentResult) return;
-      const { category, dish, fortune } = currentResult;
+      const { restaurant, fortune } = currentResult;
       const el = fortune.element;
       const lc = fortune.luckyColor;
+      const budgetLabel = BUDGET_LABELS[currentLang][restaurant.budget];
+      const matchText = buildMatchText(restaurant);
+
       $('tarot-card').innerHTML = `
         <div class="card-label">${t('oracleLabel')}</div>
-        <div class="card-emoji">${category.emoji}</div>
-        <div class="card-dish-primary">${dishName(dish)}</div>
-        <div class="card-dish-secondary">${dishSub(dish)}</div>
-        <div class="card-category">${catName(category)}</div>
+        <div class="card-emoji">${restaurant.emoji}</div>
+        <div class="card-restaurant-name">${restaurant.name}</div>
+        <div class="card-meta">
+          <span>📍 ${restaurant.distance}</span>
+          <span>💰 ${t('perPerson')}${budgetLabel}</span>
+        </div>
+        <div class="card-dishes">
+          <div class="dishes-title">${t('recDishes')}</div>
+          ${restaurant.dishes.map(d => `
+            <div class="card-dish-item">
+              <span class="dish-star">⭐</span>
+              <span class="dish-name">${d.name}</span>
+              <span class="dish-note">${d.note}</span>
+            </div>`).join('')}
+        </div>
         <div class="divination-copy">${fortune.message}</div>
+        ${matchText ? `<div class="match-copy">${matchText}</div>` : ''}
         <div class="element-badge">${el.emoji} ${elemName(el)}${t('elementSuffix')} · ${lc.emoji} ${t('luckyColor')}${colorName(lc)}</div>
         <div class="fortune-score">${t('lunchFortune')} ${starsHTML(fortune.fortuneScore)}</div>`;
+
+      // Re-trigger animation
       const card = $('tarot-card');
       card.style.animation = 'none';
       card.offsetHeight;
       card.style.animation = '';
-      $('btn-find-restaurant').textContent = t('findRestaurant');
-      $('btn-find-restaurant').onclick = () => window.open(buildPlatformUrl(dish, category), '_blank');
+
+      // Platform buttons
+      renderPlatformButtons(restaurant);
     }
 
-    function renderDishes(cat) {
-      $('dish-header-title').textContent = cat.emoji + ' ' + catName(cat);
-      $('btn-just-category').textContent = t('justCategory').replace('{name}', catName(cat));
-      $('dish-list').innerHTML = cat.dishes.map((d, i) => `
-        <div class="dish-card" data-index="${i}">
-          <div class="dish-names">
-            <div class="dish-primary">${dishName(d)}</div>
-            <div class="dish-secondary">${dishSub(d)}</div>
-          </div>
-          <a class="dish-external-link" href="${buildPlatformUrl(d, cat)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-            ${getPlatformIcon()} ${getPlatformName()} ›
-          </a>
-        </div>`).join('');
+    function renderPlatformButtons(restaurant) {
+      const p = restaurant.platforms;
+      if (currentLang === 'zh-HK') {
+        $('platform-row').innerHTML = `
+          <a class="platform-btn openrice" href="${p.openrice}" target="_blank" rel="noopener">🍽️ OpenRice</a>
+          <a class="platform-btn keeta" href="${p.keeta}" target="_blank" rel="noopener">🛵 Keeta</a>
+          <a class="platform-btn gmaps" href="${p.maps}" target="_blank" rel="noopener">🗺️ Maps</a>`;
+      } else {
+        $('platform-row').innerHTML = `
+          <a class="platform-btn dianping" href="${p.dianping}" target="_blank" rel="noopener">📍 大众点评</a>
+          <a class="platform-btn meituan" href="${p.meituan}" target="_blank" rel="noopener">🛵 美团</a>
+          <a class="platform-btn gaode" href="${p.gaode}" target="_blank" rel="noopener">🗺️ 高德</a>`;
+      }
+    }
+
+    // =============================================
+    // RENDER: BROWSE
+    // =============================================
+    function renderBrowse(categoryId) {
+      const db = RESTAURANT_DB[currentLang] || [];
+      const cats = CATEGORIES[currentLang] || [];
+
+      let html = '';
+      const catsToShow = categoryId ? cats.filter(c => c.id === categoryId) : cats;
+
+      catsToShow.forEach(cat => {
+        const restaurants = db.filter(r => r.category === cat.id);
+        if (restaurants.length === 0) return;
+        html += `<div class="browse-category-title">${cat.emoji} ${cat.name}</div>`;
+        html += '<div class="restaurant-list">';
+        restaurants.forEach(r => {
+          const budgetLabel = BUDGET_LABELS[currentLang][r.budget];
+          html += `
+            <div class="restaurant-card" data-id="${r.id}">
+              <span class="r-emoji">${r.emoji}</span>
+              <div class="r-info">
+                <div class="r-name">${r.name}</div>
+                <div class="r-meta">📍 ${r.distance} · 💰 ${budgetLabel} · 👥 ${r.groupSize.map(g => g === 4 ? '5+' : g).join('-')}人</div>
+              </div>
+              <span class="r-arrow">›</span>
+            </div>`;
+        });
+        html += '</div>';
+      });
+
+      $('browse-list').innerHTML = html;
     }
 
     // =============================================
     // DIVINATION ANIMATION
     // =============================================
-    function runDivination() {
+    let isAnimating = false;
+    function runDivination(specificRestaurant) {
+      if (isAnimating) return;
+      const pool = specificRestaurant ? [specificRestaurant] : getFilteredPool();
+      if (pool.length === 0) {
+        showToast(t('noResult'));
+        return;
+      }
+
+      isAnimating = true;
       showScreen($('screen-divine'));
-      const $emoji = $('slot-emoji');
-      const $msg = $('divine-message');
-      const $sub = $('divine-sub');
-      const msgs = getSpinMsgs();
+      const emojiEl = $('slot-emoji');
+      const msgEl = $('divine-message');
+      const subEl = $('divine-sub');
+      const msgs = SPIN_MESSAGES[currentLang] || SPIN_MESSAGES['zh-HK'];
 
-      $emoji.className = 'slot-emoji spinning';
-      $msg.textContent = msgs[0];
-      $sub.textContent = '';
+      emojiEl.className = 'slot-emoji spinning';
+      msgEl.textContent = msgs[0];
+      subEl.textContent = '';
 
-      const allEmojis = FOOD_DATA.map(c => c.emoji);
+      const allEmojis = pool.map(r => r.emoji);
+      const total = 20;
       let cycle = 0, msgIdx = 0;
-      const total = 18, baseDelay = 70, maxDelay = 350;
 
-      const msgInterval = setInterval(() => {
+      const msgTimer = setInterval(() => {
         msgIdx = (msgIdx + 1) % msgs.length;
-        $msg.textContent = msgs[msgIdx];
-      }, 600);
+        msgEl.textContent = msgs[msgIdx];
+      }, 500);
 
-      function tick() {
-        $emoji.textContent = allEmojis[cycle % allEmojis.length];
+      const spinTimer = setInterval(() => {
+        emojiEl.textContent = allEmojis[cycle % allEmojis.length];
         cycle++;
         if (cycle >= total) {
-          clearInterval(msgInterval);
-          $emoji.className = 'slot-emoji';
+          clearInterval(spinTimer);
+          clearInterval(msgTimer);
+          emojiEl.className = 'slot-emoji';
           const fortune = getDailyFortune();
-          const biased = fortune.element.categories;
-          const pool = Math.random() < 0.7 ? FOOD_DATA.filter(c => biased.includes(c.id)) : FOOD_DATA;
-          const cat = (pool.length ? pool : FOOD_DATA)[Math.floor(Math.random() * (pool.length || FOOD_DATA.length))];
-          const dish = cat.dishes[Math.floor(Math.random() * cat.dishes.length)];
-          currentResult = { category: cat, dish, fortune };
-          $emoji.textContent = cat.emoji;
-          $msg.textContent = t('fortuneRevealed');
-          $sub.textContent = '✨';
-          setTimeout(() => { renderResult(); showScreen($('screen-result')); }, 800);
-          return;
+          const restaurant = pool[Math.floor(Math.random() * pool.length)];
+          currentResult = { restaurant, fortune };
+          emojiEl.textContent = restaurant.emoji;
+          msgEl.textContent = t('fortuneRevealed');
+          subEl.textContent = '✨';
+          setTimeout(() => {
+            renderResult();
+            showScreen($('screen-result'));
+            isAnimating = false;
+          }, 800);
         }
-        const progress = cycle / total;
-        setTimeout(tick, baseDelay + (maxDelay - baseDelay) * Math.pow(progress, 2.5));
-      }
-      setTimeout(tick, 300);
+      }, 120);
     }
 
     // =============================================
@@ -795,13 +1360,16 @@
     // =============================================
     function shareResult() {
       if (!currentResult) return;
-      const { category, dish, fortune } = currentResult;
+      const { restaurant, fortune } = currentResult;
+      const budgetLabel = BUDGET_LABELS[currentLang][restaurant.budget];
       let text = '🔮 ' + t('oracleLabel') + '\n\n';
-      text += category.emoji + ' ' + dishName(dish) + ' / ' + dishSub(dish) + '\n';
-      text += '(' + catName(category) + ')\n\n';
-      text += fortune.element.emoji + ' ' + fortune.message + '\n\n';
+      text += restaurant.emoji + ' ' + restaurant.name + '\n';
+      text += '📍 ' + restaurant.distance + ' · 💰 ' + t('perPerson') + budgetLabel + '\n\n';
+      text += t('recDishes') + '\n';
+      restaurant.dishes.forEach(d => { text += '⭐ ' + d.name + ' — ' + d.note + '\n'; });
+      text += '\n' + fortune.element.emoji + ' ' + fortune.message + '\n\n';
       text += t('lunchFortune') + ' ' + '★'.repeat(fortune.fortuneScore) + '☆'.repeat(5 - fortune.fortuneScore) + '\n';
-      text += '— Times Square Lunch Oracle 🔮';
+      text += '— ' + t('subtitle') + ' 🔮';
       if (navigator.share) navigator.share({ text }).catch(() => copyText(text));
       else copyText(text);
     }
@@ -813,50 +1381,116 @@
     // =============================================
     // EVENTS
     // =============================================
-    $('lang-bar').addEventListener('click', e => {
+
+    // Language toggle
+    document.querySelector('.lang-toggle').addEventListener('click', e => {
       const btn = e.target.closest('.lang-btn');
       if (!btn) return;
       currentLang = btn.dataset.lang;
       localStorage.setItem('lunchOracleLang', currentLang);
-      renderLangBar();
+      renderLangToggle();
       renderHome();
     });
 
-    $('btn-draw').addEventListener('click', runDivination);
+    // Preference panel toggle
+    $('pref-toggle').addEventListener('click', () => {
+      $('pref-panel').classList.toggle('expanded');
+    });
+
+    // Preference pill selection
+    document.querySelector('.pref-body').addEventListener('click', e => {
+      const pill = e.target.closest('.pref-pill');
+      if (!pill) return;
+      const key = pill.dataset.key;
+      let val = pill.dataset.value;
+      const isMulti = pill.dataset.multi === 'true';
+
+      // Parse value
+      if (val === '__null__') val = null;
+      else if (!isNaN(Number(val)) && val !== '') val = Number(val);
+
+      if (isMulti) {
+        // dietary: toggle in array
+        if (!Array.isArray(prefs[key])) prefs[key] = [];
+        if (val === null) {
+          prefs[key] = [];
+        } else {
+          const idx = prefs[key].indexOf(val);
+          if (idx >= 0) prefs[key].splice(idx, 1);
+          else {
+            // Remove 'null' equivalent if adding a real value
+            prefs[key].push(val);
+          }
+        }
+      } else {
+        // Single select: toggle off if same
+        prefs[key] = prefs[key] === val ? null : val;
+      }
+
+      savePrefs();
+      renderPrefs();
+    });
+
+    // Draw button
+    $('btn-draw').addEventListener('click', () => runDivination());
+
+    // Pick yourself
     $('btn-pick-yourself').addEventListener('click', () => document.querySelector('.section-divider').scrollIntoView({ behavior: 'smooth' }));
+
+    // Category grid
     $('category-grid').addEventListener('click', e => {
       const card = e.target.closest('.category-card');
       if (!card) return;
-      selectedCategory = FOOD_DATA.find(c => c.id === card.dataset.id);
-      renderDishes(selectedCategory);
-      showScreen($('screen-dishes'));
+      renderBrowse(card.dataset.id);
+      showScreen($('screen-browse'));
     });
-    $('btn-back-home').addEventListener('click', () => showScreen($('screen-home')));
-    $('btn-just-category').addEventListener('click', () => {
-      const dish = selectedCategory.dishes[Math.floor(Math.random() * selectedCategory.dishes.length)];
-      const fortune = getDailyFortune();
-      currentResult = { category: selectedCategory, dish, fortune };
-      renderResult();
-      showScreen($('screen-result'));
-    });
-    $('dish-list').addEventListener('click', e => {
-      const card = e.target.closest('.dish-card');
+
+    // Browse: restaurant card
+    $('browse-list').addEventListener('click', e => {
+      const card = e.target.closest('.restaurant-card');
       if (!card) return;
-      const dish = selectedCategory.dishes[parseInt(card.dataset.index, 10)];
-      const fortune = getDailyFortune();
-      currentResult = { category: selectedCategory, dish, fortune };
-      renderResult();
-      showScreen($('screen-result'));
+      const db = RESTAURANT_DB[currentLang] || [];
+      const restaurant = db.find(r => r.id === card.dataset.id);
+      if (restaurant) runDivination(restaurant);
     });
-    $('btn-accept').addEventListener('click', () => { showToast(t('enjoyMeal')); setTimeout(() => showScreen($('screen-home')), 1500); });
-    $('btn-redraw').addEventListener('click', runDivination);
+
+    // Back button
+    $('btn-back-home').addEventListener('click', () => showScreen($('screen-home')));
+
+    // Result actions
+    $('btn-accept').addEventListener('click', () => {
+      if (currentResult) {
+        addToHistory(currentResult.restaurant, currentResult.restaurant.dishes[0].name);
+      }
+      showToast(t('enjoyMeal'));
+      setTimeout(() => { renderHistory(); showScreen($('screen-home')); }, 1500);
+    });
+    $('btn-redraw').addEventListener('click', () => runDivination());
     $('btn-share').addEventListener('click', shareResult);
-    $('btn-browse').addEventListener('click', () => showScreen($('screen-home')));
+    $('btn-browse').addEventListener('click', () => {
+      renderBrowse();
+      showScreen($('screen-browse'));
+    });
+
+    // History: exclude toggle
+    $('history-list').addEventListener('click', e => {
+      const btn = e.target.closest('.h-exclude');
+      if (!btn) return;
+      toggleExclusion(btn.dataset.id);
+      renderHistory();
+    });
+
+    // History: clear
+    $('history-clear').addEventListener('click', () => {
+      localStorage.removeItem('lunchOracleHistory');
+      localStorage.removeItem('lunchOracleExclude');
+      renderHistory();
+    });
 
     // =============================================
     // INIT
     // =============================================
-    renderLangBar();
+    renderLangToggle();
     renderHome();
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
   </script>

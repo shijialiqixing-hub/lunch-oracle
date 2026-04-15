@@ -1,7 +1,7 @@
 {
   "name": "午餐神諭 Lunch Oracle",
   "short_name": "午餐神諭",
-  "description": "Daily random food divination for Times Square office workers",
+  "description": "Smart lunch picker for Times Square HK & Hangzhou Huanglong office workers",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0F0F0F",
